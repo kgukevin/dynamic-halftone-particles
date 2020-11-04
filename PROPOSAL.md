@@ -12,3 +12,4 @@
     - Add color?
     - Allow user to input their own images through the app
     - Explore other generative art pathways based on the vector field like property such as [Perlin Noise](https://youtu.be/4Se0_w0ISYk?t=948)
+        - If implemented, can also implement allowing user to change the field through app
