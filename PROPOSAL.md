@@ -1,1 +1,14 @@
-Put your final project proposal here.
+- What project you want to do
+    - Create a dynamic particle halftone art maker. 
+- What background knowledge do you have on this kind of project, and why do you want to do this project? (Put another way, in what way will you be motivated to see this project to completion?)
+    - Halftone images are made by representing an image using different sized circles. I found a [youtube](https://www.youtube.com/watch?v=Fx3hTgrOyFg) demo of a cinder app that created halftone images but with dynamic particles like the ones we used in the Ideal Gas Simulation Lab while exploring generative art, and I thought it would be really cool to try and implement it myself.
+- A rough timeline of what will get accomplished and when (e.g, "By the end of Week 2, I will have implemented XYZ and will start working on ABC")
+    - Week 1: figure out how to convert images into halftone images and create a model of particle radii mapped to coordinates
+    - Week 2: figure out how to implement gravitational effect of particles and changing radii (vector field like property)
+    - Week 3: flex week in case of roadblocks (especially with converting images to halftone) or to implement the next "stretch goal"
+- If you were to finish the project early, what extra "stretch goals" could you implement?
+    - Implement ever changing motion (particles never become static even under gravity effect) -> Now that I think about it...possibly able to be done using Perlin Noise? (see below)
+    - Different shapes
+    - Add color?
+    - Allow user to input their own images through the app
+    - Explore other generative art pathways based on the vector field like property such as [Perlin Noise](https://youtu.be/4Se0_w0ISYk?t=948)
