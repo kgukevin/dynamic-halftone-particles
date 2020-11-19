@@ -58,7 +58,7 @@ class Model {
    */
   void UpdateMove();
 
-  void UpdateRadii();
+  void UpdateRadii(const ci::Channel32f &img_channel);
 
   /**
    * Increases velocity of every particle by 20%.

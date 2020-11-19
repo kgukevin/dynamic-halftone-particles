@@ -1,6 +1,8 @@
 
 #include <visualizer/particle_box.h>
 
+#include <utility>
+
 namespace idealgas {
 
     namespace visualizer {
@@ -8,10 +10,27 @@ namespace idealgas {
         using glm::vec2;
 
         ParticleBox::ParticleBox(const vec2 &top_left_corner, double particle_box_width,
-                             double particle_box_height)
-                : model_(top_left_corner, vec2(particle_box_width, particle_box_height)), top_left_corner_(top_left_corner),
+                                 double particle_box_height)
+                : model_(top_left_corner, vec2(particle_box_width, particle_box_height)),
+                  top_left_corner_(top_left_corner),
                   particle_box_height_(particle_box_height),
                   particle_box_width_(particle_box_width) {
+
+            for (size_t x = 0; x < particle_box_width; x+=10) {
+                for (size_t y = 0; y < particle_box_height; y+=10) {
+                    model_.CreateAndAddParticle(top_left_corner+vec2(x, y), 0, 0, 1, "white");
+                }
+            }
+
+        }
+
+        ParticleBox::ParticleBox(const glm::vec2 &top_left_corner, double particle_box_width,
+                                 double particle_box_height, const ci::Channel32f &channel)
+                : model_(top_left_corner, vec2(particle_box_width, particle_box_height)),
+                  top_left_corner_(top_left_corner),
+                  particle_box_height_(particle_box_height),
+                  particle_box_width_(particle_box_width),
+                  img_channel_(std::move(channel)) {
 
         }
 
@@ -23,7 +42,7 @@ namespace idealgas {
 
             for (const Particle &particle : model_.get_particles()) {
                 std::string color = particle.color();
-                const char* svgkey = color.c_str();
+                const char *svgkey = color.c_str();
                 // convert char* svg key (color name) to rgb values
                 ci::gl::color(ci::Color(ci::svgNameToRgb(svgkey)));
 
@@ -33,6 +52,7 @@ namespace idealgas {
 
         void ParticleBox::Update() {
             model_.UpdateMove();
+            model_.UpdateRadii(img_channel_);
         }
 
         void ParticleBox::HandleBrush(const vec2 &brush_screen_coords) {
@@ -76,6 +96,10 @@ namespace idealgas {
             if (current_particle_index_ == particle_types_.size()) {
                 current_particle_index_ = 0;
             }
+        }
+
+        void ParticleBox::LoadImage(const ci::Channel32f &img_channel) {
+            img_channel_ = img_channel;
         }
 
         void ParticleBox::Clear() {

@@ -32,7 +32,11 @@ void Model::UpdateMove() {
   }
 }
 
-void Model::UpdateRadii() {}
+void Model::UpdateRadii(const ci::Channel32f &img_channel) {
+    for (Particle &particle : particles_) {
+        particle.SetRadius((img_channel.getValue(particle.position()))*6.0f);
+    }
+}
 
 void Model::EvaluateCollisions() {
   for (Particle &particle : particles_) {

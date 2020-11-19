@@ -36,4 +36,8 @@ void Particle::set_velocity(const glm::vec2 &velocity) {
   velocity_ = velocity;
 }
 
+void Particle::SetRadius(const float_t &radius) {
+    radius_ = radius;
+}
+
 }  // namespace idealgas

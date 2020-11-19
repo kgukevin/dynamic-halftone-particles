@@ -10,20 +10,21 @@ IdealGasApp::IdealGasApp()
                     kWindowLength - 2 * kMargin,
                     kWindowHeight - 2 * kMargin) {
   ci::app::setWindowSize((int)kWindowLength, (int)kWindowHeight);
+    mChannel = ci::Channel32f(loadImage(loadAsset("testimage2.jpg")));
 
+    particle_box_.LoadImage(mChannel);
+//mSurface = ci::Surface(loadImage(loadAsset("testimage.jpg")));
 
-mSurface = ci::Surface(loadImage(loadAsset("testimage.jpg")));
-
-mChannel = ci::Channel(loadImage(loadAsset("testimage.jpg")));
+//mChannel = ci::Channel(loadImage(loadAsset("testimage.jpg")));
 
 mTexture = ci::gl::Texture::create(mChannel);
 
 }
 
 void IdealGasApp::draw() {
-//  ci::Color8u background_color(0, 0, 0);  // black like my soul
-//  ci::gl::clear(background_color);
-  ci::gl::draw(mTexture, getWindowBounds());
+  ci::Color8u background_color(0, 0, 0);  // black like my soul
+  ci::gl::clear(background_color);
+  //ci::gl::draw(mTexture, getWindowBounds());
 
   particle_box_.Draw();
   particle_box_.Update();

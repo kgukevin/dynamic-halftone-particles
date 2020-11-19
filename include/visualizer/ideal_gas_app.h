@@ -34,7 +34,7 @@ class IdealGasApp : public ci::app::App {
   ParticleBox particle_box_;
     ci::gl::Texture2dRef  mTexture;
     ci::Surface mSurface;
-    ci::Channel mChannel;
+    ci::Channel32f mChannel;
 
 
 };

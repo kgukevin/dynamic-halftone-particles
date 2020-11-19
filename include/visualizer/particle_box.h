@@ -23,6 +23,9 @@ class ParticleBox {
   ParticleBox(const glm::vec2 &top_left_corner, double particle_box_width,
               double particle_box_height);
 
+  ParticleBox(const glm::vec2 &top_left_corner, double particle_box_width,
+                double particle_box_height, const ci::Channel32f &channel);
+
   /**
    * Displays the current state of the particle_box in the Cinder application.
    */
@@ -66,6 +69,8 @@ class ParticleBox {
    */
   void IncrementParticleTypeIndex();
 
+  void LoadImage(const ci::Channel32f &img_channel);
+
   /**
    * Set all of the particle_box pixels to an unshaded state.
    */
@@ -79,6 +84,8 @@ class ParticleBox {
   double particle_box_width_;
 
   Model model_;
+
+  ci::Channel32f img_channel_;
 
   /**
    * Current particle type index.

@@ -47,6 +47,8 @@ class Particle {
 
   void set_velocity(const glm::vec2 &velocity);
 
+  void SetRadius(const float_t &radius);
+
   /**
    * Updates postition using velocity by one increment of time.
    */
