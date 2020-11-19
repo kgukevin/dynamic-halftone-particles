@@ -5,6 +5,8 @@
 #include "cinder/gl/gl.h"
 #include "histogram_box.h"
 #include "particle_box.h"
+#include "cinder/ImageIo.h"
+#include "cinder/gl/Texture.h"
 
 namespace idealgas {
 
@@ -27,11 +29,14 @@ class IdealGasApp : public ci::app::App {
       875 + 100 + 291.6666;  // standard square + margin + histogram length
   const double kWindowHeight = 875;
   const double kMargin = 100;
-  const double histogramLength = 291.6666;  // standard square / 3
 
  private:
   ParticleBox particle_box_;
-  HistogramBox histogram_box_;
+    ci::gl::Texture2dRef  mTexture;
+    ci::Surface mSurface;
+    ci::Channel mChannel;
+
+
 };
 
 }  // namespace visualizer

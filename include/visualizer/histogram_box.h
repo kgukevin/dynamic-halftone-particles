@@ -12,7 +12,7 @@ namespace visualizer {
 /**
  * A histogram_box which will be displayed in the Cinder application and update
  * based on number of particle types and their respective histogram velocity
- * data distribution.
+ * assets distribution.
  */
 class HistogramBox {
  public:
@@ -31,7 +31,7 @@ class HistogramBox {
   void Draw() const;
 
   /**
-   * Inputs data to create histograms and display.
+   * Inputs assets to create histograms and display.
    * @param data to create histograms from
    */
   void InputData(const std::map<std::string, std::vector<float>>& data);

@@ -56,7 +56,9 @@ class Model {
   /**
    * Updates positions and velocities accordingly.
    */
-  void Update();
+  void UpdateMove();
+
+  void UpdateRadii();
 
   /**
    * Increases velocity of every particle by 20%.
@@ -69,9 +71,9 @@ class Model {
   void DecreaseVelocity();
 
   /**
-   * Packages model data into data usable by histogram.
-   * @return data for histogram to graph mapped from particle type(color) to
-   * velocity data
+   * Packages model assets into assets usable by histogram.
+   * @return assets for histogram to graph mapped from particle type(color) to
+   * velocity assets
    */
   std::map<std::string, std::vector<float>> CreateVelHistogramData() const;
 

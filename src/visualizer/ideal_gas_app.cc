@@ -7,23 +7,26 @@ namespace visualizer {
 
 IdealGasApp::IdealGasApp()
     : particle_box_(glm::vec2(kMargin, kMargin),
-                    kWindowLength - 3 * kMargin - histogramLength,
-                    kWindowHeight - 2 * kMargin),
-      histogram_box_(
-          glm::vec2(kWindowLength - kMargin - histogramLength, kMargin),
-          histogramLength, kWindowHeight - 2 * kMargin, kMargin / 2) {
+                    kWindowLength - 2 * kMargin,
+                    kWindowHeight - 2 * kMargin) {
   ci::app::setWindowSize((int)kWindowLength, (int)kWindowHeight);
+
+
+mSurface = ci::Surface(loadImage(loadAsset("testimage.jpg")));
+
+mChannel = ci::Channel(loadImage(loadAsset("testimage.jpg")));
+
+mTexture = ci::gl::Texture::create(mChannel);
+
 }
 
 void IdealGasApp::draw() {
-  ci::Color8u background_color(0, 0, 0);  // black like my soul
-  ci::gl::clear(background_color);
+//  ci::Color8u background_color(0, 0, 0);  // black like my soul
+//  ci::gl::clear(background_color);
+  ci::gl::draw(mTexture, getWindowBounds());
 
   particle_box_.Draw();
   particle_box_.Update();
-
-  histogram_box_.InputData(particle_box_.GetModel().CreateVelHistogramData());
-  histogram_box_.Draw();
 
   ci::gl::drawStringCentered(
       "Press Delete to clear the particle_box. Click mouse to add a particle. "

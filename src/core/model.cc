@@ -25,12 +25,14 @@ void Model::CreateAndAddParticle(const glm::vec2 &pos,
   particles_.push_back(new_particle);
 }
 
-void Model::Update() {
+void Model::UpdateMove() {
   EvaluateCollisions();
   for (Particle &particle : particles_) {
     particle.UpdatePosition();
   }
 }
+
+void Model::UpdateRadii() {}
 
 void Model::EvaluateCollisions() {
   for (Particle &particle : particles_) {

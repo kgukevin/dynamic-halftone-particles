@@ -12,13 +12,7 @@ namespace idealgas {
                 : model_(top_left_corner, vec2(particle_box_width, particle_box_height)), top_left_corner_(top_left_corner),
                   particle_box_height_(particle_box_height),
                   particle_box_width_(particle_box_width) {
-//          Particle new_particle(vec2(400, 400),vec2(6,5), 2,1,"red");
-//          Particle new_particle2(vec2(500, 400),vec2(-6,3), 5,5,"red");
-//          model_.AddParticle(new_particle);
-//          model_.AddParticle(new_particle2);
-//for(int x = 0; x < 100; x++){
-//  model_.CreateAndAddParticle(vec2(300, 300),4, 7, 1, "darkorange");
-//}
+
         }
 
         void ParticleBox::Draw() const {
@@ -38,7 +32,7 @@ namespace idealgas {
         }
 
         void ParticleBox::Update() {
-            model_.Update();
+            model_.UpdateMove();
         }
 
         void ParticleBox::HandleBrush(const vec2 &brush_screen_coords) {
