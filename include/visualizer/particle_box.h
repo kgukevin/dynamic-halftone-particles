@@ -4,7 +4,7 @@
 
 #include "cinder/gl/gl.h"
 
-namespace idealgas {
+namespace halftoneparticle {
 
 namespace visualizer {
 
@@ -104,4 +104,4 @@ class ParticleBox {
 
 }  // namespace visualizer
 
-}  // namespace idealgas
+}  // namespace halftoneparticle

@@ -8,7 +8,7 @@
 #include "cinder/gl/gl.h"
 #include "particle.h"
 
-namespace idealgas {
+namespace halftoneparticle {
 
 class Model {
  private:
@@ -83,4 +83,4 @@ class Model {
   void Clear();
 };
 
-}  // namespace idealgas
+}  // namespace halftoneparticle

@@ -6,7 +6,7 @@
 
 #include "cinder/gl/gl.h"
 
-namespace idealgas {
+namespace halftoneparticle {
 
 class Particle {
  private:
@@ -55,4 +55,4 @@ class Particle {
   void UpdatePosition();
 };
 
-}  // namespace idealgas
+}  // namespace halftoneparticle

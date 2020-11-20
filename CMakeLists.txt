@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 set(CMAKE_CXX_STANDARD 11)
-project(ideal-gas)
+project(final-project)
 
 # This tells the compiler to not aggressively optimize and
 # to include debugging information so that the debugger
@@ -49,14 +49,13 @@ get_filename_component(APP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/" ABSOLUTE)
 
 include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 
-list(APPEND CORE_SOURCE_FILES src/core/model.cc src/core/particle.cpp src/core/histogram.cc)
+list(APPEND CORE_SOURCE_FILES src/core/model.cc src/core/particle.cpp)
 
 list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
-        src/visualizer/ideal_gas_app.cc
-        src/visualizer/particle_box.cc
-        src/visualizer/histogram_box.cc)
+        src/visualizer/halftone_particle_app.cc
+        src/visualizer/particle_box.cc)
 
-list(APPEND TEST_FILES tests/modeltest.cc tests/histogramtest.cc)
+list(APPEND TEST_FILES tests/modeltest.cc)
 
 ci_make_app(
         APP_NAME        ideal-gas-simulation

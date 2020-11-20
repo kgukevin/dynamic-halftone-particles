@@ -1,10 +1,10 @@
-#include <visualizer/ideal_gas_app.h>
+#include <visualizer/halftone_particle_app.h>
 
-using idealgas::visualizer::IdealGasApp;
+using halftoneparticle::visualizer::HalftoneParticleApp;
 
-void prepareSettings(IdealGasApp::Settings* settings) {
+void prepareSettings(HalftoneParticleApp::Settings* settings) {
   settings->setResizable(false);
 }
 
 // This line is a macro that expands into an "int main()" function.
-CINDER_APP(IdealGasApp, ci::app::RendererGl, prepareSettings);
+CINDER_APP(HalftoneParticleApp, ci::app::RendererGl, prepareSettings);

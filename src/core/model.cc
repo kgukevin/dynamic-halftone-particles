@@ -1,6 +1,6 @@
 #include <core/model.h>
 
-namespace idealgas {
+namespace halftoneparticle {
 std::vector<Particle> Model::get_particles() const {
   return particles_;
 }
@@ -130,4 +130,4 @@ void Model::Clear() {
   particles_.clear();
 }
 
-}  // namespace idealgas
+}  // namespace halftoneparticle

@@ -3,22 +3,18 @@
 #include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
-#include "histogram_box.h"
 #include "particle_box.h"
 #include "cinder/ImageIo.h"
 #include "cinder/gl/Texture.h"
 
-namespace idealgas {
+namespace halftoneparticle {
 
 namespace visualizer {
 
-/**
- * Allows a user to simulate particle collisions and analyze particle
- * velocity histograms.
- */
-class IdealGasApp : public ci::app::App {
+
+class HalftoneParticleApp : public ci::app::App {
  public:
-  IdealGasApp();
+  HalftoneParticleApp();
 
   void draw() override;
   void mouseDown(ci::app::MouseEvent event) override;
@@ -41,4 +37,4 @@ class IdealGasApp : public ci::app::App {
 
 }  // namespace visualizer
 
-}  // namespace idealgas
+}  // namespace halftoneparticle

@@ -1,11 +1,11 @@
 #include <core/model.h>
-#include <visualizer/ideal_gas_app.h>
+#include <visualizer/halftone_particle_app.h>
 
-namespace idealgas {
+namespace halftoneparticle {
 
 namespace visualizer {
 
-IdealGasApp::IdealGasApp() : particle_box_(glm::vec2(kMargin, kMargin),
+HalftoneParticleApp::HalftoneParticleApp() : particle_box_(glm::vec2(kMargin, kMargin),
                               kWindowLength - 2 * kMargin,
                               kWindowHeight - 2 * kMargin) {
 
@@ -26,7 +26,7 @@ mTexture = ci::gl::Texture::create(mChannel);
 
 }
 
-void IdealGasApp::draw() {
+void HalftoneParticleApp::draw() {
   ci::Color8u background_color(0, 0, 0);  // black like my soul
   ci::gl::clear(background_color);
   //ci::gl::draw(mTexture, getWindowBounds());
@@ -48,15 +48,15 @@ void IdealGasApp::draw() {
 //      ci::Color("white"), ci::Font("Arial", 20));
 }
 
-void IdealGasApp::mouseDown(ci::app::MouseEvent event) {
+void HalftoneParticleApp::mouseDown(ci::app::MouseEvent event) {
   particle_box_.HandleBrush(event.getPos());
 }
 
-void IdealGasApp::mouseDrag(ci::app::MouseEvent event) {
+void HalftoneParticleApp::mouseDrag(ci::app::MouseEvent event) {
   particle_box_.HandleBrush(event.getPos());
 }
 
-void IdealGasApp::keyDown(ci::app::KeyEvent event) {
+void HalftoneParticleApp::keyDown(ci::app::KeyEvent event) {
   switch (event.getCode()) {
     case ci::app::KeyEvent::KEY_UP:
       particle_box_.GetModel().IncreaseVelocity();
@@ -78,4 +78,4 @@ void IdealGasApp::keyDown(ci::app::KeyEvent event) {
 
 }  // namespace visualizer
 
-}  // namespace idealgas
+}  // namespace halftoneparticle

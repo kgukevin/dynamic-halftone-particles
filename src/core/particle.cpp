@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-namespace idealgas {
+namespace halftoneparticle {
 
 const glm::vec2 Particle::position() const {
   return position_;
@@ -40,4 +40,4 @@ void Particle::SetRadius(const float_t &radius) {
     radius_ = radius;
 }
 
-}  // namespace idealgas
+}  // namespace halftoneparticle

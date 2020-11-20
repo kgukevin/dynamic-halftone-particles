@@ -3,7 +3,7 @@
 
 #include <utility>
 
-namespace idealgas {
+namespace halftoneparticle {
 
     namespace visualizer {
 
@@ -110,4 +110,4 @@ namespace idealgas {
 
     }  // namespace visualizer
 
-}  // namespace idealgas
+}  // namespace halftoneparticle
