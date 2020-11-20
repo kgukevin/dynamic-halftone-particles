@@ -34,7 +34,7 @@ void Model::UpdateMove() {
 
 void Model::UpdateRadii(const ci::Channel32f &img_channel) {
     for (Particle &particle : particles_) {
-        particle.SetRadius((img_channel.getValue(particle.position()))*6.0f);
+        particle.SetRadius((img_channel.getValue(particle.position()))*10.0f);
     }
 }
 
