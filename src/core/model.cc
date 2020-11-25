@@ -117,15 +117,6 @@ void Model::DecreaseVelocity() {
   }
 }
 
-std::map<std::string, std::vector<float>> Model::CreateVelHistogramData()
-    const {
-  std::map<std::string, std::vector<float>> histogram_data;
-  for (const Particle &particle : particles_) {
-    histogram_data[particle.color()].push_back(particle.GetVelocityMagn());
-  }
-  return histogram_data;
-}
-
 void Model::Clear() {
   particles_.clear();
 }

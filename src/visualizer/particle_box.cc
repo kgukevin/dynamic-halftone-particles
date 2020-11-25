@@ -18,7 +18,7 @@ namespace halftoneparticle {
 
             for (size_t x = 0; x < particle_box_width; x+=20) {
                 for (size_t y = 0; y < particle_box_height; y+=20) {
-                    model_.CreateAndAddParticle(top_left_corner+vec2(x, y), 0, 0, 1, "white");
+                    model_.CreateAndAddParticle(top_left_corner+vec2(x, y), 0, 1, 1, "white");
                 }
             }
 
@@ -46,13 +46,14 @@ namespace halftoneparticle {
                 // convert char* svg key (color name) to rgb values
                 ci::gl::color(ci::Color(ci::svgNameToRgb(svgkey)));
 
-                ci::gl::drawSolidCircle(particle.position(), particle.radius());
+                //only drawn radius changes not actual radius
+                ci::gl::drawSolidCircle(particle.position(), (img_channel_.getValue(particle.position()))*10.0f);
             }
         }
 
         void ParticleBox::Update() {
             model_.UpdateMove();
-            model_.UpdateRadii(img_channel_);
+            //model_.UpdateRadii(img_channel_);
         }
 
         void ParticleBox::HandleBrush(const vec2 &brush_screen_coords) {

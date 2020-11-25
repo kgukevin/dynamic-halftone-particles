@@ -71,13 +71,6 @@ class Model {
   void DecreaseVelocity();
 
   /**
-   * Packages model assets into assets usable by histogram.
-   * @return assets for histogram to graph mapped from particle type(color) to
-   * velocity assets
-   */
-  std::map<std::string, std::vector<float>> CreateVelHistogramData() const;
-
-  /**
    * Clear model particles.
    */
   void Clear();
