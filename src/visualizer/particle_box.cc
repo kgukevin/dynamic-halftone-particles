@@ -59,6 +59,8 @@ namespace halftoneparticle {
         void ParticleBox::HandleBrush(const vec2 &brush_screen_coords) {
             if (IsWithinWalls(brush_screen_coords)) {
 
+                model_.SetGravityOrigin(brush_screen_coords);
+
                 if (particle_types_[current_particle_index_] == "darkorange") {
                     model_.CreateAndAddParticle(brush_screen_coords, 4, 7, 5, "darkorange");
                 }
@@ -88,7 +90,7 @@ namespace halftoneparticle {
             return model_;
         }
 
-        const std::string ParticleBox::GetCurrentParticleType() {
+        const std::string &ParticleBox::GetCurrentParticleType() {
             return particle_types_[current_particle_index_];
         }
 

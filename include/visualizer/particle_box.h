@@ -61,7 +61,7 @@ class ParticleBox {
    * Gets particle type (classified by color).
    * @return string (svgname) of current particle type
    */
-  const std::string GetCurrentParticleType();
+  const std::string &GetCurrentParticleType();
 
   /**
    * Increments particle type index through particle types array. Wraps back to

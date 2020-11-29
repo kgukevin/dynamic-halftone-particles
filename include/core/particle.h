@@ -15,6 +15,7 @@ class Particle {
   float_t radius_;
   glm::vec2 position_;
   glm::vec2 velocity_;
+  glm::vec2 acceleration_;
 
  public:
   Particle(const glm::vec2 &position, const glm::vec2 &velocity,
@@ -53,6 +54,10 @@ class Particle {
    * Updates postition using velocity by one increment of time.
    */
   void UpdatePosition();
+
+  void UpdateVelocity();
+
+    void UpdateAcceleration(const glm::vec2 &g_origin);
 };
 
 }  // namespace halftoneparticle

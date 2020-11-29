@@ -32,6 +32,17 @@ void Particle::UpdatePosition() {
   position_ += velocity_;
 }
 
+void Particle::UpdateVelocity() {
+    velocity_ += acceleration_;
+}
+
+void Particle::UpdateAcceleration(const glm::vec2 &g_origin) {
+    glm::vec2 displacement = position_ - g_origin;
+    float distance = sqrt(pow(displacement.x, 2) + pow(displacement.y, 2));
+    acceleration_.x = -1 * displacement.x/distance;
+    acceleration_.y = -1 * displacement.y/distance;
+}
+
 void Particle::set_velocity(const glm::vec2 &velocity) {
   velocity_ = velocity;
 }

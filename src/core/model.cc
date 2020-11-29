@@ -29,6 +29,8 @@ void Model::UpdateMove() {
   EvaluateCollisions();
   for (Particle &particle : particles_) {
     particle.UpdatePosition();
+    particle.UpdateAcceleration(gravity_origin_);
+    particle.UpdateVelocity();
   }
 }
 
@@ -101,6 +103,10 @@ void Model::HandleParticleCollision(Particle &particle, Particle &particle2) {
     particle.set_velocity(new_vel);
     particle2.set_velocity(new_vel2);
   }
+}
+
+    void Model::SetGravityOrigin(const glm::vec2 &gravity_origin){
+    gravity_origin_ = gravity_origin;
 }
 
 void Model::IncreaseVelocity() {

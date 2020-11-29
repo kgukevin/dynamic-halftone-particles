@@ -15,6 +15,7 @@ class Model {
   glm::vec2 dimensions_;
   glm::vec2 origin_;
   std::vector<Particle> particles_;
+  glm::vec2 gravity_origin_;
 
   void HandleWallCollision(Particle &particle);
 
@@ -59,6 +60,8 @@ class Model {
   void UpdateMove();
 
   void UpdateRadii(const ci::Channel32f &img_channel);
+
+  void SetGravityOrigin(const glm::vec2 &gravity_origin);
 
   /**
    * Increases velocity of every particle by 20%.
