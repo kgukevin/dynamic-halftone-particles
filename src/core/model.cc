@@ -1,4 +1,6 @@
 #include <core/model.h>
+#include <cinder/app/AppBase.h>
+
 
 namespace halftoneparticle {
 std::vector<Particle> Model::get_particles() const {
@@ -23,15 +25,24 @@ void Model::CreateAndAddParticle(const glm::vec2 &pos,
 
   Particle new_particle(pos, new_velocity, radius, mass, color);
   particles_.push_back(new_particle);
+
 }
 
 void Model::UpdateMove() {
   EvaluateCollisions();
   for (Particle &particle : particles_) {
     particle.UpdatePosition();
+      float noise = perlin_.fBm( glm::vec3( gravity_origin_ * 0.005f, ci::app::getElapsedSeconds() * 0.1f ) );
+      float noise2 = perlin_.fBm( glm::vec3( particle.position() * 0.005f, ci::app::getElapsedSeconds() * 0.1f ) );
+      float angle = noise * 50.0f;
+      float angle2 = noise2 * 50.0f;
+      //particle.set_velocity(particle.velocity() + glm::vec2(2*cos(angle),2*sin(angle)));
+      float perAge = 1.0f-(1.0f-particle.age()/100000000);
+      particle.set_velocity(particle.velocity() + glm::vec2(.2*cos(angle)*perAge,.2*sin(angle)*perAge)+ glm::vec2(.2*cos(angle2)*perAge,.2*sin(angle2)*perAge));
     particle.UpdateAcceleration(gravity_origin_);
     particle.UpdateVelocity();
   }
+ DecreaseVelocity();
 }
 
 void Model::UpdateRadii(const ci::Channel32f &img_channel) {
@@ -119,7 +130,7 @@ void Model::IncreaseVelocity() {
 void Model::DecreaseVelocity() {
   for (Particle &particle : particles_) {
     particle.set_velocity(
-        glm::vec2(particle.velocity().x * .8, particle.velocity().y * .8));
+        glm::vec2(particle.velocity().x * .9, particle.velocity().y * .9));
   }
 }
 

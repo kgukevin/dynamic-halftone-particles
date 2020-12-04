@@ -61,17 +61,21 @@ namespace halftoneparticle {
 
                 model_.SetGravityOrigin(brush_screen_coords);
 
-                if (particle_types_[current_particle_index_] == "darkorange") {
-                    model_.CreateAndAddParticle(brush_screen_coords, 4, 7, 5, "darkorange");
-                }
-                if (particle_types_[current_particle_index_] == "cyan") {
-                    model_.CreateAndAddParticle(brush_screen_coords, 6, 4, 3, "cyan");
-                }
-                if (particle_types_[current_particle_index_] == "deeppink") {
-                    model_.CreateAndAddParticle(brush_screen_coords, 2, 10, 7, "deeppink");
-                }
-                if (particle_types_[current_particle_index_] == "mediumspringgreen") {
-                    model_.CreateAndAddParticle(brush_screen_coords, 2, 5, 4.5, "mediumspringgreen");
+//                if (particle_types_[current_particle_index_] == "darkorange") {
+//                    model_.CreateAndAddParticle(brush_screen_coords, 4, 7, 5, "darkorange");
+//                }
+//                if (particle_types_[current_particle_index_] == "cyan") {
+//                    model_.CreateAndAddParticle(brush_screen_coords, 6, 4, 3, "cyan");
+//                }
+//                if (particle_types_[current_particle_index_] == "deeppink") {
+//                    model_.CreateAndAddParticle(brush_screen_coords, 1, 10, 7, "deeppink");
+//                }
+//                if (particle_types_[current_particle_index_] == "mediumspringgreen") {
+//                    model_.CreateAndAddParticle(brush_screen_coords, 2, 5, 4.5, "mediumspringgreen");
+//                }
+
+                for (int num = 0; num < 10; num++) {
+                    model_.CreateAndAddParticle(brush_screen_coords, 4, 7, 7, particle_types_[current_particle_index_]);
                 }
 
             }

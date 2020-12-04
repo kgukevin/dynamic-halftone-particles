@@ -1,5 +1,4 @@
 #include <core/particle.h>
-
 #include <fstream>
 
 namespace halftoneparticle {
@@ -16,6 +15,10 @@ const float Particle::GetVelocityMagn() const {
   return sqrt(pow(velocity_.x, 2) + pow(velocity_.y, 2));
 }
 
+    const int Particle::age() const {
+    return age_;
+}
+
 const float_t Particle::radius() const {
   return radius_;
 }
@@ -30,17 +33,19 @@ const std::string Particle::color() const {
 
 void Particle::UpdatePosition() {
   position_ += velocity_;
+  age_++;
 }
 
 void Particle::UpdateVelocity() {
+
     velocity_ += acceleration_;
 }
 
 void Particle::UpdateAcceleration(const glm::vec2 &g_origin) {
     glm::vec2 displacement = position_ - g_origin;
     float distance = sqrt(pow(displacement.x, 2) + pow(displacement.y, 2));
-    acceleration_.x = -1 * displacement.x/distance;
-    acceleration_.y = -1 * displacement.y/distance;
+    acceleration_.x = (float)-1 * displacement.x/distance;
+    acceleration_.y = (float)-1 * displacement.y/distance;
 }
 
 void Particle::set_velocity(const glm::vec2 &velocity) {

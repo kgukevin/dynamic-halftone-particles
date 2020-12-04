@@ -16,6 +16,7 @@ class Particle {
   glm::vec2 position_;
   glm::vec2 velocity_;
   glm::vec2 acceleration_;
+  int age_;
 
  public:
   Particle(const glm::vec2 &position, const glm::vec2 &velocity,
@@ -33,6 +34,8 @@ class Particle {
   const glm::vec2 position() const;
 
   const glm::vec2 velocity() const;
+
+  const int age() const;
 
   /**
    * Calculates velocity magnitude.

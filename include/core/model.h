@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "cinder/gl/gl.h"
+#include "cinder/Perlin.h"
 #include "particle.h"
 
 namespace halftoneparticle {
@@ -15,7 +16,9 @@ class Model {
   glm::vec2 dimensions_;
   glm::vec2 origin_;
   std::vector<Particle> particles_;
-  glm::vec2 gravity_origin_;
+  glm::vec2 gravity_origin_ = glm::vec2(1500,800);
+
+  cinder::Perlin perlin_ = cinder::Perlin();
 
   void HandleWallCollision(Particle &particle);
 
