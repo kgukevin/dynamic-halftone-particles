@@ -37,7 +37,7 @@ namespace halftoneparticle {
             float angle = noise * 50.0f;
             float angle2 = noise2 * 50.0f;
             float perAge = (particle.age() / 100000000.0f);
-            particle.set_velocity(particle.velocity() + glm::vec2(.2 * cos(angle) * perAge, .2 * sin(angle) * perAge) +
+            particle.set_velocity(particle.velocity() + glm::vec2(.05 * cos(angle) * perAge, .05 * sin(angle) * perAge) +
                                   glm::vec2(.2 * cos(angle2) * perAge, .2 * sin(angle2) * perAge));
             particle.UpdateAcceleration(gravity_origin_);
             particle.UpdateVelocity();

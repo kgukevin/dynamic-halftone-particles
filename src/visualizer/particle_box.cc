@@ -47,7 +47,7 @@ namespace halftoneparticle {
                 ci::gl::color(ci::Color(ci::svgNameToRgb(svgkey)));
 
                 //only drawn radius changes not actual radius
-                ci::gl::drawSolidCircle(particle.position(), (img_channel_.getValue(particle.position())) * 10.0f);
+                ci::gl::drawSolidCircle(particle.position(), (img_channel_.getValue(particle.position())) * 5.0f);
             }
         }
 
@@ -75,7 +75,7 @@ namespace halftoneparticle {
 //                }
 
                 for (int num = 0; num < 10; num++) {
-                    model_.CreateAndAddParticle(brush_screen_coords, 1, 7, 7, particle_types_[current_particle_index_]);
+                    model_.CreateAndAddParticle(brush_screen_coords, 1, 9, 1, particle_types_[current_particle_index_]);
                 }
 
             }
