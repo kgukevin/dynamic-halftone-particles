@@ -44,8 +44,8 @@ namespace halftoneparticle {
     void Particle::UpdateAcceleration(const glm::vec2 &g_origin) {
         glm::vec2 displacement = position_ - g_origin;
         float distance = sqrt(pow(displacement.x, 2) + pow(displacement.y, 2));
-        acceleration_.x = (float) -1 * displacement.x / distance;
-        acceleration_.y = (float) -1 * displacement.y / distance;
+        acceleration_.x = -.9f * displacement.x / distance;
+        acceleration_.y = -.9f * displacement.y / distance;
     }
 
     void Particle::set_velocity(const glm::vec2 &velocity) {

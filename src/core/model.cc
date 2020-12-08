@@ -130,7 +130,7 @@ namespace halftoneparticle {
     void Model::DecreaseVelocity() {
         for (Particle &particle : particles_) {
             particle.set_velocity(
-                    glm::vec2(particle.velocity().x * .9, particle.velocity().y * .9));
+                    glm::vec2(particle.velocity().x * .7, particle.velocity().y * .7));
         }
     }
 

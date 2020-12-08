@@ -9,7 +9,7 @@ namespace halftoneparticle {
                                                                    kWindowLength - 2 * kMargin,
                                                                    kWindowHeight - 2 * kMargin) {
 
-            mChannel = ci::Channel32f(loadImage(loadAsset("testimage3.jpg")));
+            mChannel = ci::Channel32f(loadImage(loadAsset("testimage2.jpg")));
             const ci::Area img_area = mChannel.getBounds();
             ci::app::setWindowSize((int) img_area.x2, (int) img_area.y2);
 
