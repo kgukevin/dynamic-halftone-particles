@@ -49,7 +49,7 @@ get_filename_component(APP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/" ABSOLUTE)
 
 include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 
-list(APPEND CORE_SOURCE_FILES src/core/model.cc src/core/particle.cpp)
+list(APPEND CORE_SOURCE_FILES src/core/model.cc src/core/particle.cpp src/core/KDTree.cpp)
 
 list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
         src/visualizer/halftone_particle_app.cc
