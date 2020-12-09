@@ -29,23 +29,13 @@ namespace halftoneparticle {
     }
 
     void Model::UpdateMove() {
-
-        for (auto it = particles_.begin(); it != particles_.end();) {
-            if (it->age() == 500) {
-                it = particles_.erase(it);
-            }
-            else {
-                ++it;
-            }
-        }
-
         for (Particle &particle : particles_) {
             particle.UpdatePosition();
             float noise = perlin_.fBm(glm::vec3(gravity_origin_ * 0.009f,  0.1f));
             float noise2 = perlin_.fBm(glm::vec3(particle.position() * 0.009f,  0.1f));
             float angle = noise * 20.0f;
             float angle2 = noise2 * 20.0f;
-            float perAge = (particle.age() / 5.0f);
+            float perAge = (particle.age() / 100000000.0f);
 //            particle.set_velocity(particle.velocity() + glm::vec2(.05 * cos(angle) * perAge, .05 * sin(angle) * perAge) +
 //                                  glm::vec2(.2 * cos(angle2) * perAge, .2 * sin(angle2) * perAge));
             particle.set_velocity(particle.velocity() + glm::vec2(.1 * cos(angle2) * perAge, .1 * sin(angle2) * perAge));
@@ -57,11 +47,11 @@ namespace halftoneparticle {
         DecreaseVelocity();
     }
 
-    void Model::UpdateRadii(const ci::Channel32f &img_channel) {
-        for (Particle &particle : particles_) {
-            particle.SetRadius((img_channel.getValue(particle.position())) * 10.0f);
-        }
-    }
+//    void Model::UpdateRadii(const ci::Channel32f &img_channel) {
+//        for (Particle &particle : particles_) {
+//            particle.SetRadius((img_channel.getValue(particle.position())) * 10.0f);
+//        }
+//    }
 
     void Model::EvaluateCollisions() {
         for (Particle &particle : particles_) {

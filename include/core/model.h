@@ -8,6 +8,7 @@
 #include "cinder/gl/gl.h"
 #include "cinder/Perlin.h"
 #include "particle.h"
+#include "KDTree.hpp"
 
 namespace halftoneparticle {
 
@@ -62,7 +63,7 @@ namespace halftoneparticle {
          */
         void UpdateMove();
 
-        void UpdateRadii(const ci::Channel32f &img_channel);
+        //void UpdateRadii(const ci::Channel32f &img_channel);
 
         void SetGravityOrigin(const glm::vec2 &gravity_origin);
 

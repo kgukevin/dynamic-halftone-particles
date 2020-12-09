@@ -16,6 +16,7 @@ namespace halftoneparticle {
                   particle_box_height_(particle_box_height),
                   particle_box_width_(particle_box_width) {
 
+            //TODO turn into "draw initial image" method
             for (size_t x = 0; x < particle_box_width; x += 20) {
                 for (size_t y = 0; y < particle_box_height; y += 20) {
                     model_.CreateAndAddParticle(top_left_corner + vec2(x, y), 0, 1, 1, "white");
