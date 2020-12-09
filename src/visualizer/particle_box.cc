@@ -47,7 +47,7 @@ namespace halftoneparticle {
                 ci::gl::color(ci::Color(ci::svgNameToRgb(svgkey)));
 
                 //only drawn radius changes not actual radius
-                ci::gl::drawSolidCircle(particle.position(), (img_channel_.getValue(particle.position())) * 6.0f);
+                ci::gl::drawSolidCircle(particle.position(), (img_channel_.getValue(particle.position())) * 7.0f);
             }
         }
 
