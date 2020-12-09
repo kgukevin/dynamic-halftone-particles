@@ -19,6 +19,8 @@ namespace halftoneparticle {
         int age_;
 
     public:
+        Particle();
+
         Particle(const glm::vec2 &position, const glm::vec2 &velocity,
                  const float_t &radius)
                 : position_(position), velocity_(velocity), radius_(radius) {};

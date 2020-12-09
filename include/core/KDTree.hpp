@@ -17,13 +17,14 @@
 #include <vector>
 #include "particle.h"
 
-using point_t = std::vector< double >;
-using indexArr = std::vector< size_t >;
-using pointIndex = typename std::pair< std::vector< double >, size_t >;
+using point_t = std::vector< double >; // vector of points
+using indexArr = std::vector< size_t >; // vector of corresponding indexes
+using pointIndex = typename std::pair< std::vector< double >, size_t >; // combined vector and index
 
 class KDNode {
    public:
     using KDNodePtr = std::shared_ptr< KDNode >;
+    halftoneparticle::Particle particle_;
     size_t index;
     point_t x;
     KDNodePtr left;
@@ -31,13 +32,14 @@ class KDNode {
 
     // initializer
     KDNode();
-    KDNode(const point_t &, const size_t &, const KDNodePtr &,
+    KDNode(const halftoneparticle::Particle &, const size_t &, const KDNodePtr &,
            const KDNodePtr &);
-    KDNode(const pointIndex &, const KDNodePtr &, const KDNodePtr &);
+    KDNode(const halftoneparticle::Particle &, const pointIndex &, const KDNodePtr &, const KDNodePtr &);
     ~KDNode();
 
     // getter
     double coord(const size_t &);
+    // halftoneparticle::Particle GetParticle();
 
     // conversions
     explicit operator bool();
@@ -81,7 +83,9 @@ class KDTree {
     KDNodePtr root;
     KDNodePtr leaf;
 
-    KDNodePtr make_tree(const pointIndexArr::iterator &begin,  //
+    KDNodePtr make_tree( const std::vector<halftoneparticle::Particle>::const_iterator &part_begin,
+                         const std::vector<halftoneparticle::Particle>::const_iterator &part_end,
+                         const pointIndexArr::iterator &begin,  //
                         const pointIndexArr::iterator &end,    //
                         const size_t &length,                  //
                         const size_t &level                    //
@@ -110,7 +114,7 @@ class KDTree {
     pointIndex nearest_pointIndex(const point_t &pt);
 
    private:
-    pointIndexArr neighborhood_(  //
+    std::vector<halftoneparticle::Particle> neighborhood_(  //
         const KDNodePtr &branch,  //
         const point_t &pt,        //
         const double &rad,        //
@@ -118,15 +122,15 @@ class KDTree {
     );
 
    public:
-    pointIndexArr neighborhood(  //
-        const point_t &pt,       //
+    std::vector<halftoneparticle::Particle> neighborhood(  //
+        const halftoneparticle::Particle &p,       //
         const double &rad);
 
-    pointVec neighborhood_points(  //
-        const point_t &pt,         //
-        const double &rad);
+//    pointVec neighborhood_points(  //
+//        const point_t &pt,         //
+//        const double &rad);
 
-    indexArr neighborhood_indices(  //
-        const point_t &pt,          //
-        const double &rad);
+//    indexArr neighborhood_indices(  //
+//        const point_t &pt,          //
+//        const double &rad);
 };

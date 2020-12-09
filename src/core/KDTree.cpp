@@ -23,16 +23,18 @@
 
 KDNode::KDNode() = default;
 
-KDNode::KDNode(const point_t &pt, const size_t &idx_, const KDNodePtr &left_,
+KDNode::KDNode(const halftoneparticle::Particle &p, const size_t &idx_, const KDNodePtr &left_,
                const KDNodePtr &right_) {
-    x = pt;
+    particle_ = p;
+    x = point_t ({particle_.position().x,particle_.position().y});
     index = idx_;
     left = left_;
     right = right_;
 }
 
-KDNode::KDNode(const pointIndex &pi, const KDNodePtr &left_,
+KDNode::KDNode(const halftoneparticle::Particle &p, const pointIndex &pi, const KDNodePtr &left_,
                const KDNodePtr &right_) {
+    particle_ = p;
     x = pi.first;
     index = pi.second;
     left = left_;
@@ -42,6 +44,7 @@ KDNode::KDNode(const pointIndex &pi, const KDNodePtr &left_,
 KDNode::~KDNode() = default;
 
 double KDNode::coord(const size_t &idx) { return x.at(idx); }
+//halftoneparticle::Particle KDNode::GetParticle() { return particle_; }
 KDNode::operator bool() { return (!x.empty()); }
 KDNode::operator point_t() { return x; }
 KDNode::operator size_t() { return index; }
@@ -96,7 +99,9 @@ inline void sort_on_idx(const pointIndexArr::iterator &begin,  //
 
 using pointVec = std::vector< point_t >;
 
-KDNodePtr KDTree::make_tree(const pointIndexArr::iterator &begin,  //
+KDNodePtr KDTree::make_tree(const std::vector<halftoneparticle::Particle>::const_iterator &part_begin,
+                            const std::vector<halftoneparticle::Particle>::const_iterator &part_end,
+                            const pointIndexArr::iterator &begin,  //
                             const pointIndexArr::iterator &end,    //
                             const size_t &length,                  //
                             const size_t &level                    //
@@ -112,37 +117,43 @@ KDNodePtr KDTree::make_tree(const pointIndexArr::iterator &begin,  //
     }
 
     auto middle = begin + (length / 2);
+    auto part_middle = part_begin + (length / 2);
 
     auto l_begin = begin;
     auto l_end = middle;
     auto r_begin = middle + 1;
     auto r_end = end;
 
+    auto l_part_begin = part_begin;
+    auto l_part_end = part_middle;
+    auto r_part_begin = part_middle + 1;
+    auto r_part_end = part_end;
+
     size_t l_len = length / 2;
     size_t r_len = length - l_len - 1;
 
     KDNodePtr left;
     if (l_len > 0 && dim > 0) {
-        left = make_tree(l_begin, l_end, l_len, (level + 1) % dim);
+        left = make_tree(l_part_begin, l_part_end, l_begin, l_end, l_len, (level + 1) % dim);
     } else {
         left = leaf;
     }
     KDNodePtr right;
     if (r_len > 0 && dim > 0) {
-        right = make_tree(r_begin, r_end, r_len, (level + 1) % dim);
+        right = make_tree(r_part_begin, r_part_end, r_begin, r_end, r_len, (level + 1) % dim);
     } else {
         right = leaf;
     }
 
     // KDNode result = KDNode();
-    return std::make_shared< KDNode >(*middle, left, right);
+    return std::make_shared< KDNode >(*part_middle, *middle, left, right);
 }
 
 KDTree::KDTree(const std::vector<halftoneparticle::Particle>& particles) {
-    pointVec point_array;
-    for(const halftoneparticle::Particle& particle : particles) {
-        point_array.push_back(std::vector<double>(particle.position().x,particle.position().y));
-    }
+//    pointVec point_array;
+//    for(const halftoneparticle::Particle& particle : particles) {
+//        point_array.push_back(std::vector<double>(particle.position().x,particle.position().y));
+//    }
     //TODO delete
     //std::pair<point_t , int> test(std::vector<double>(1,2),2);
 //    std::pair<point_t, halftoneparticle::Particle> test(std::vector<double>(1,2),halftoneparticle::Particle(glm::vec2(1,2), glm::vec2(1,2),.5f));
@@ -151,8 +162,11 @@ KDTree::KDTree(const std::vector<halftoneparticle::Particle>& particles) {
     leaf = std::make_shared< KDNode >();
     // iterators
     pointIndexArr arr;
-    for (size_t i = 0; i < point_array.size(); i++) {
-        arr.push_back(pointIndex(point_array.at(i), i));
+    for (size_t i = 0; i < particles.size(); i++) {
+        double xcoor = particles.at(i).position().x;
+        double ycoor = particles.at(i).position().y;
+        std::vector<double> pos({xcoor, ycoor});
+        arr.push_back(pointIndex(pos, i));
     }
 
     auto begin = arr.begin();
@@ -161,7 +175,7 @@ KDTree::KDTree(const std::vector<halftoneparticle::Particle>& particles) {
     size_t length = arr.size();
     size_t level = 0;  // starting
 
-    root = KDTree::make_tree(begin, end, length, level);
+    root = KDTree::make_tree(particles.begin(), particles.end(), begin, end, length, level);
 }
 
 KDNodePtr KDTree::nearest_(   //
@@ -253,7 +267,7 @@ pointIndex KDTree::nearest_pointIndex(const point_t &pt) {
     return pointIndex(point_t(*Nearest), size_t(*Nearest));
 }
 
-pointIndexArr KDTree::neighborhood_(  //
+std::vector<halftoneparticle::Particle> KDTree::neighborhood_(  //
     const KDNodePtr &branch,          //
     const point_t &pt,                //
     const double &rad,                //
@@ -264,7 +278,7 @@ pointIndexArr KDTree::neighborhood_(  //
     if (!bool(*branch)) {
         // branch has no point, means it is a leaf,
         // no points to add
-        return pointIndexArr();
+        return std::vector<halftoneparticle::Particle>();
     }
 
     size_t dim = pt.size();
@@ -275,9 +289,9 @@ pointIndexArr KDTree::neighborhood_(  //
     dx = point_t(*branch).at(level) - pt.at(level);
     dx2 = dx * dx;
 
-    pointIndexArr nbh, nbh_s, nbh_o;
+    std::vector<halftoneparticle::Particle> nbh, nbh_s, nbh_o;
     if (d <= r2) {
-        nbh.push_back(pointIndex(*branch));
+        nbh.push_back((branch->particle_));
     }
 
     //
@@ -301,33 +315,34 @@ pointIndexArr KDTree::neighborhood_(  //
     return nbh;
 };
 
-pointIndexArr KDTree::neighborhood(  //
-    const point_t &pt,               //
+std::vector<halftoneparticle::Particle> KDTree::neighborhood(  //
+    const halftoneparticle::Particle &p,               //
     const double &rad) {
     size_t level = 0;
-    return neighborhood_(root, pt, rad, level);
+    point_t pos = {p.position().x,p.position().y};
+    return neighborhood_(root, pos, rad, level);
 }
 
-pointVec KDTree::neighborhood_points(  //
-    const point_t &pt,                 //
-    const double &rad) {
-    size_t level = 0;
-    pointIndexArr nbh = neighborhood_(root, pt, rad, level);
-    pointVec nbhp;
-    nbhp.resize(nbh.size());
-    std::transform(nbh.begin(), nbh.end(), nbhp.begin(),
-                   [](pointIndex x) { return x.first; });
-    return nbhp;
-}
+//pointVec KDTree::neighborhood_points(  //
+//    const point_t &pt,                 //
+//    const double &rad) {
+//    size_t level = 0;
+//    std::vector<halftoneparticle::Particle> nbh = neighborhood_(root, pt, rad, level);
+//    pointVec nbhp;
+//    nbhp.resize(nbh.size());
+//    std::transform(nbh.begin(), nbh.end(), nbhp.begin(),
+//                   [](pointIndex x) { return x.first; });
+//    return nbhp;
+//}
 
-indexArr KDTree::neighborhood_indices(  //
-    const point_t &pt,                  //
-    const double &rad) {
-    size_t level = 0;
-    pointIndexArr nbh = neighborhood_(root, pt, rad, level);
-    indexArr nbhi;
-    nbhi.resize(nbh.size());
-    std::transform(nbh.begin(), nbh.end(), nbhi.begin(),
-                   [](pointIndex x) { return x.second; });
-    return nbhi;
-}
+//indexArr KDTree::neighborhood_indices(  //
+//    const point_t &pt,                  //
+//    const double &rad) {
+//    size_t level = 0;
+//    std::vector<halftoneparticle::Particle> nbh = neighborhood_(root, pt, rad, level);
+//    indexArr nbhi;
+//    nbhi.resize(nbh.size());
+//    std::transform(nbh.begin(), nbh.end(), nbhi.begin(),
+//                   [](pointIndex x) { return x.second; });
+//    return nbhi;
+//}

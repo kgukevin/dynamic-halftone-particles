@@ -35,6 +35,7 @@ namespace halftoneparticle {
             float noise2 = perlin_.fBm(glm::vec3(particle.position() * 0.009f,  0.1f));
             float angle = noise * 20.0f;
             float angle2 = noise2 * 20.0f;
+            // TODO remove age
             float perAge = (particle.age() / 100000000.0f);
 //            particle.set_velocity(particle.velocity() + glm::vec2(.05 * cos(angle) * perAge, .05 * sin(angle) * perAge) +
 //                                  glm::vec2(.2 * cos(angle2) * perAge, .2 * sin(angle2) * perAge));
@@ -54,9 +55,12 @@ namespace halftoneparticle {
 //    }
 
     void Model::EvaluateCollisions() {
+        KDTree tree(particles_);
         for (Particle &particle : particles_) {
             HandleWallCollision(particle);
-            for (Particle &particle2 : particles_) {
+            std::vector<Particle> neighborhood = tree.neighborhood(particle, particle.radius());
+            for (Particle &particle2 : neighborhood) {
+            //for (Particle &particle2 : particles_) {
                 if (&particle != &particle2) {
                     if (glm::distance(particle.position(), particle2.position()) <=
                         particle.radius() + particle2.radius()) {

@@ -2,6 +2,7 @@
 #include <fstream>
 
 namespace halftoneparticle {
+    Particle::Particle() = default;
 
     const glm::vec2 Particle::position() const {
         return position_;
