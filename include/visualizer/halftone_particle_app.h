@@ -16,6 +16,10 @@ namespace halftoneparticle {
         public:
             HalftoneParticleApp();
 
+            /**
+             * Allows for drag and drop image.
+             * @param event
+             */
             void fileDrop(ci::app::FileDropEvent event);
 
             void draw() override;

@@ -41,6 +41,10 @@ namespace halftoneparticle {
              */
             void HandleParticleCreation(const glm::vec2 &brush_screen_coords);
 
+            /**
+             * Tells model to update origin of gravity.
+             * @param cursor_screen_coords
+             */
             void ChangeGravityOrigin(const glm::vec2 &cursor_screen_coords);
 
             /**
@@ -62,6 +66,10 @@ namespace halftoneparticle {
              */
             void IncrementParticleTypeIndex();
 
+            /**
+             * Loads image channel into particlebox.
+             * @param img_channel
+             */
             void LoadImage(const ci::Channel32f &img_channel);
 
             /**

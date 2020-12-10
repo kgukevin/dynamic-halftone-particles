@@ -39,7 +39,7 @@ namespace halftoneparticle {
         for (Particle &particle : particles_) {
             particle.UpdatePosition();
             ApplyPerlinNoise(particle, particle.position(), .8f);
-            particle.UpdateAcceleration(gravity_origin_);
+            particle.UpdateAcceleration(gravity_origin_, .2f);
             particle.UpdateVelocity();
         }
         EvaluateCollisions();
@@ -51,7 +51,7 @@ namespace halftoneparticle {
         float noise = perlin_.fBm(glm::vec3(origin * 0.009f, 0.1f));
         float angle = noise * 20.0f;
 
-        particle.SetVelocity(particle.velocity() + glm::vec2(influence_factor * cos(angle), influence_factor * sin(angle)));
+        particle.SetVelocity(particle.velocity() + influence_factor * glm::vec2(cos(angle), sin(angle)));
     }
 
     void Model::EvaluateCollisions() {

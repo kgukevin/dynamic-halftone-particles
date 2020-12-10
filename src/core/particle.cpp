@@ -39,11 +39,11 @@ namespace halftoneparticle {
         velocity_ += acceleration_;
     }
 
-    void Particle::UpdateAcceleration(const glm::vec2 &g_origin) {
+    void Particle::UpdateAcceleration(const glm::vec2 &g_origin, float influence_factor) {
         glm::vec2 displacement = position_ - g_origin;
-        float distance = sqrt(pow(displacement.x, 2) + pow(displacement.y, 2));
-        acceleration_.x = -.2f * displacement.x / distance;
-        acceleration_.y = -.2f * displacement.y / distance;
+        float distance = glm::distance(position_, g_origin);//sqrt(pow(displacement.x, 2) + pow(displacement.y, 2));
+        acceleration_.x = -influence_factor * displacement.x / distance;
+        acceleration_.y = -influence_factor * displacement.y / distance;
     }
 
     void Particle::SetVelocity(const glm::vec2 &velocity) {

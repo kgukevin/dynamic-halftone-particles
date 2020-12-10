@@ -50,13 +50,21 @@ namespace halftoneparticle {
         void SetAge(int age);
 
         /**
-         * Updates postition using velocity by one increment of time.
+         * Updates position using velocity by one increment of time.
          */
         void UpdatePosition();
 
+        /**
+         * Updates velocity using acceleration by one increment of time.
+         */
         void UpdateVelocity();
 
-        void UpdateAcceleration(const glm::vec2 &g_origin);
+        /**
+         * Updates acceleration due to gravity.
+         * @param g_origin origin of gravity
+         * @param influence_factor multiplies as magnitude of gravity vector
+         */
+        void UpdateAcceleration(const glm::vec2 &g_origin, float influence_factor);
     };
 
 }// namespace halftoneparticle

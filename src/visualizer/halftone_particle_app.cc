@@ -71,7 +71,7 @@ namespace halftoneparticle {
                     particle_box_.GetModel().DecreaseVelocity();
                     break;
 
-                case ci::app::KeyEvent::KEY_g:
+                case ci::app::KeyEvent::KEY_p:
                     particle_box_.IncrementParticleTypeIndex();
                     break;
 

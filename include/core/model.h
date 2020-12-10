@@ -68,6 +68,12 @@ namespace halftoneparticle {
          */
         void UpdateMovement();
 
+        /**
+         * Applies perlin noise to particle velocity.
+         * @param particle
+         * @param origin of perlin noise influence
+         * @param influence_factor multiplies as magnitude of noise vector
+         */
         void ApplyPerlinNoise(Particle &particle, const glm::vec2 &origin, float influence_factor);
 
         /**
