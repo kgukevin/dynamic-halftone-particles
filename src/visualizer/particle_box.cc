@@ -22,7 +22,12 @@ namespace halftoneparticle {
 //                    model_.CreateAndAddParticle(top_left_corner + vec2(x, y), 0, 1, 1, "white");
 //                }
 //            }
-
+for (size_t x = 0; x < 160; x+=80) {
+    Particle p1(top_left_corner + vec2(500, x), vec2(1, 0), 5, 1, "cyan");
+    Particle p2(top_left_corner + vec2(700, x), vec2(-1, 0), 5, 1, "pink");
+    model_.AddParticle(p1);
+    model_.AddParticle(p2);
+}
         }
 
         ParticleBox::ParticleBox(const glm::vec2 &top_left_corner, double particle_box_width,
@@ -48,7 +53,8 @@ namespace halftoneparticle {
                 ci::gl::color(ci::Color(ci::svgNameToRgb(svgkey)));
 
                 //only drawn radius changes not actual radius
-                ci::gl::drawSolidCircle(particle.position(), (img_channel_.getValue(particle.position())) * 7.0f);
+                //ci::gl::drawSolidCircle(particle.position(), (img_channel_.getValue(particle.position())) * 7.0f);
+                ci::gl::drawSolidCircle(particle.position(), particle.radius());
             }
         }
 

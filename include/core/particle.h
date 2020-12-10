@@ -53,7 +53,7 @@ namespace halftoneparticle {
 
         void set_velocity(const glm::vec2 &velocity);
 
-        void SetRadius(const float_t &radius);
+        void SetAge(int age);
 
         /**
          * Updates postition using velocity by one increment of time.

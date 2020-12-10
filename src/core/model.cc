@@ -39,13 +39,13 @@ namespace halftoneparticle {
             float perAge = (particle.age() / 100000000.0f);
 //            particle.set_velocity(particle.velocity() + glm::vec2(.05 * cos(angle) * perAge, .05 * sin(angle) * perAge) +
 //                                  glm::vec2(.2 * cos(angle2) * perAge, .2 * sin(angle2) * perAge));
-            particle.set_velocity(particle.velocity() + glm::vec2(.1 * cos(angle2) * perAge, .1 * sin(angle2) * perAge));
-            particle.UpdateAcceleration(gravity_origin_);
-            particle.UpdateVelocity();
+            //particle.set_velocity(particle.velocity() + glm::vec2(.1 * cos(angle2), .1 * sin(angle2)));
+            //particle.UpdateAcceleration(gravity_origin_);
+            //particle.UpdateVelocity();
         }
         EvaluateCollisions();
 
-        DecreaseVelocity();
+        //DecreaseVelocity();
     }
 
 //    void Model::UpdateRadii(const ci::Channel32f &img_channel) {
@@ -62,10 +62,11 @@ namespace halftoneparticle {
             for (Particle &particle2 : neighborhood) {
             //for (Particle &particle2 : particles_) {
                 if (&particle != &particle2) {
-                    if (glm::distance(particle.position(), particle2.position()) <=
-                        particle.radius() + particle2.radius()) {
-                        HandleParticleCollision(particle, particle2);
-                    }
+                    HandleParticleCollision(particle, particle2);
+//                    if (glm::distance(particle.position(), particle2.position()) <=
+//                        particle.radius() + particle2.radius()) {
+//                        HandleParticleCollision(particle, particle2);
+//                    }
                 }
             }
         }

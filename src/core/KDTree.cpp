@@ -23,58 +23,59 @@
 
 KDNode::KDNode() = default;
 
-KDNode::KDNode(const halftoneparticle::Particle &p, const size_t &idx_, const KDNodePtr &left_,
+//KDNode::KDNode(const halftoneparticle::Particle &p, const size_t &idx_, const KDNodePtr &left_,
+//               const KDNodePtr &right_) {
+//    particle_ = p;
+//    x = point_t ({particle_.position().x,particle_.position().y});
+//    index = idx_;
+//    left = left_;
+//    right = right_;
+//}
+
+KDNode::KDNode(halftoneparticle::Particle &p, const KDNodePtr &left_,
                const KDNodePtr &right_) {
     particle_ = p;
     x = point_t ({particle_.position().x,particle_.position().y});
-    index = idx_;
-    left = left_;
-    right = right_;
-}
-
-KDNode::KDNode(const halftoneparticle::Particle &p, const pointIndex &pi, const KDNodePtr &left_,
-               const KDNodePtr &right_) {
-    particle_ = p;
-    x = pi.first;
-    index = pi.second;
+    index = particle_.age();
     left = left_;
     right = right_;
 }
 
 KDNode::~KDNode() = default;
 
-double KDNode::coord(const size_t &idx) { return x.at(idx); }
+//double KDNode::coord(const size_t &idx) { return x.at(idx); }
 //halftoneparticle::Particle KDNode::GetParticle() { return particle_; }
 KDNode::operator bool() { return (!x.empty()); }
-KDNode::operator point_t() { return x; }
-KDNode::operator size_t() { return index; }
-KDNode::operator pointIndex() { return pointIndex(x, index); }
+//KDNode::operator point_t() { return x; }
+//KDNode::operator size_t() { return index; }
+//KDNode::operator pointIndex() { return pointIndex(x, index); }
 
 KDNodePtr NewKDNodePtr() {
     KDNodePtr mynode = std::make_shared< KDNode >();
     return mynode;
 }
 
-inline double dist2(const point_t &a, const point_t &b) {
-    double distc = 0;
-    for (size_t i = 0; i < a.size(); i++) {
-        double di = a.at(i) - b.at(i);
-        distc += di * di;
-    }
-    return distc;
+inline double dist2(const glm::vec2 &a, const glm::vec2 &b) {
+    //double distc = 0;
+//    for (size_t i = 0; i < a.size(); i++) {
+//        double di = a.at(i) - b.at(i);
+//        distc += di * di;
+//    }
+    return glm::distance(a,b);
+    //return distc;
 }
 
 inline double dist2(const KDNodePtr &a, const KDNodePtr &b) {
-    return dist2(a->x, b->x);
+    return dist2(a->particle_.position(), b->particle_.position());
 }
 
-inline double dist(const point_t &a, const point_t &b) {
-    return std::sqrt(dist2(a, b));
-}
-
-inline double dist(const KDNodePtr &a, const KDNodePtr &b) {
-    return std::sqrt(dist2(a, b));
-}
+//inline double dist(const point_t &a, const point_t &b) {
+//    return std::sqrt(dist2(a, b));
+//}
+//
+//inline double dist(const KDNodePtr &a, const KDNodePtr &b) {
+//    return std::sqrt(dist2(a, b));
+//}
 
 comparer::comparer(size_t idx_) : idx{idx_} {};
 
@@ -99,8 +100,8 @@ inline void sort_on_idx(const pointIndexArr::iterator &begin,  //
 
 using pointVec = std::vector< point_t >;
 
-KDNodePtr KDTree::make_tree(const std::vector<halftoneparticle::Particle>::const_iterator &part_begin,
-                            const std::vector<halftoneparticle::Particle>::const_iterator &part_end,
+KDNodePtr KDTree::make_tree(std::vector<halftoneparticle::Particle>::iterator &part_begin,
+                            std::vector<halftoneparticle::Particle>::iterator &part_end,
                             const pointIndexArr::iterator &begin,  //
                             const pointIndexArr::iterator &end,    //
                             const size_t &length,                  //
@@ -110,7 +111,7 @@ KDNodePtr KDTree::make_tree(const std::vector<halftoneparticle::Particle>::const
         return NewKDNodePtr();  // empty tree
     }
 
-    size_t dim = begin->first.size();
+    size_t dim = 2;
 
     if (length > 1) {
         sort_on_idx(begin, end, level);
@@ -146,10 +147,10 @@ KDNodePtr KDTree::make_tree(const std::vector<halftoneparticle::Particle>::const
     }
 
     // KDNode result = KDNode();
-    return std::make_shared< KDNode >(*part_middle, *middle, left, right);
+    return std::make_shared< KDNode >(*part_middle, left, right);
 }
 
-KDTree::KDTree(const std::vector<halftoneparticle::Particle>& particles) {
+KDTree::KDTree(std::vector<halftoneparticle::Particle>& particles) {
 //    pointVec point_array;
 //    for(const halftoneparticle::Particle& particle : particles) {
 //        point_array.push_back(std::vector<double>(particle.position().x,particle.position().y));
@@ -163,6 +164,7 @@ KDTree::KDTree(const std::vector<halftoneparticle::Particle>& particles) {
     // iterators
     pointIndexArr arr;
     for (size_t i = 0; i < particles.size(); i++) {
+        particles.at(i).SetAge(i);
         double xcoor = particles.at(i).position().x;
         double ycoor = particles.at(i).position().y;
         std::vector<double> pos({xcoor, ycoor});
@@ -172,104 +174,107 @@ KDTree::KDTree(const std::vector<halftoneparticle::Particle>& particles) {
     auto begin = arr.begin();
     auto end = arr.end();
 
+    std::vector<halftoneparticle::Particle>::iterator part_begin = particles.begin();
+    std::vector<halftoneparticle::Particle>::iterator part_end = particles.end();
+
     size_t length = arr.size();
     size_t level = 0;  // starting
 
-    root = KDTree::make_tree(particles.begin(), particles.end(), begin, end, length, level);
+    root = KDTree::make_tree(part_begin, part_end, begin, end, length, level);
 }
 
-KDNodePtr KDTree::nearest_(   //
-    const KDNodePtr &branch,  //
-    const point_t &pt,        //
-    const size_t &level,      //
-    const KDNodePtr &best,    //
-    const double &best_dist   //
-) {
-    double d, dx, dx2;
-
-    if (!bool(*branch)) {
-        return NewKDNodePtr();  // basically, null
-    }
-
-    point_t branch_pt(*branch);
-    size_t dim = branch_pt.size();
-
-    d = dist2(branch_pt, pt);
-    dx = branch_pt.at(level) - pt.at(level);
-    dx2 = dx * dx;
-
-    KDNodePtr best_l = best;
-    double best_dist_l = best_dist;
-
-    if (d < best_dist) {
-        best_dist_l = d;
-        best_l = branch;
-    }
-
-    size_t next_lv = (level + 1) % dim;
-    KDNodePtr section;
-    KDNodePtr other;
-
-    // select which branch makes sense to check
-    if (dx > 0) {
-        section = branch->left;
-        other = branch->right;
-    } else {
-        section = branch->right;
-        other = branch->left;
-    }
-
-    // keep nearest neighbor from further down the tree
-    KDNodePtr further = nearest_(section, pt, next_lv, best_l, best_dist_l);
-    if (!further->x.empty()) {
-        double dl = dist2(further->x, pt);
-        if (dl < best_dist_l) {
-            best_dist_l = dl;
-            best_l = further;
-        }
-    }
-    // only check the other branch if it makes sense to do so
-    if (dx2 < best_dist_l) {
-        further = nearest_(other, pt, next_lv, best_l, best_dist_l);
-        if (!further->x.empty()) {
-            double dl = dist2(further->x, pt);
-            if (dl < best_dist_l) {
-                best_dist_l = dl;
-                best_l = further;
-            }
-        }
-    }
-
-    return best_l;
-};
+//KDNodePtr KDTree::nearest_(   //
+//    const KDNodePtr &branch,  //
+//    const point_t &pt,        //
+//    const size_t &level,      //
+//    const KDNodePtr &best,    //
+//    const double &best_dist   //
+//) {
+//    double d, dx, dx2;
+//
+//    if (!bool(*branch)) {
+//        return NewKDNodePtr();  // basically, null
+//    }
+//
+//    point_t branch_pt(*branch);
+//    size_t dim = branch_pt.size();
+//
+//    d = dist2(branch_pt, pt);
+//    dx = branch_pt.at(level) - pt.at(level);
+//    dx2 = dx * dx;
+//
+//    KDNodePtr best_l = best;
+//    double best_dist_l = best_dist;
+//
+//    if (d < best_dist) {
+//        best_dist_l = d;
+//        best_l = branch;
+//    }
+//
+//    size_t next_lv = (level + 1) % dim;
+//    KDNodePtr section;
+//    KDNodePtr other;
+//
+//    // select which branch makes sense to check
+//    if (dx > 0) {
+//        section = branch->left;
+//        other = branch->right;
+//    } else {
+//        section = branch->right;
+//        other = branch->left;
+//    }
+//
+//    // keep nearest neighbor from further down the tree
+//    KDNodePtr further = nearest_(section, pt, next_lv, best_l, best_dist_l);
+//    if (!further->x.empty()) {
+//        double dl = dist2(further->x, pt);
+//        if (dl < best_dist_l) {
+//            best_dist_l = dl;
+//            best_l = further;
+//        }
+//    }
+//    // only check the other branch if it makes sense to do so
+//    if (dx2 < best_dist_l) {
+//        further = nearest_(other, pt, next_lv, best_l, best_dist_l);
+//        if (!further->x.empty()) {
+//            double dl = dist2(further->x, pt);
+//            if (dl < best_dist_l) {
+//                best_dist_l = dl;
+//                best_l = further;
+//            }
+//        }
+//    }
+//
+//    return best_l;
+//};
 
 // default caller
-KDNodePtr KDTree::nearest_(const point_t &pt) {
-    size_t level = 0;
-    // KDNodePtr best = branch;
-    double branch_dist = dist2(point_t(*root), pt);
-    return nearest_(root,          // beginning of tree
-                    pt,            // point we are querying
-                    level,         // start from level 0
-                    root,          // best is the root
-                    branch_dist);  // best_dist = branch_dist
-};
-
-point_t KDTree::nearest_point(const point_t &pt) {
-    return point_t(*nearest_(pt));
-};
-size_t KDTree::nearest_index(const point_t &pt) {
-    return size_t(*nearest_(pt));
-};
-
-pointIndex KDTree::nearest_pointIndex(const point_t &pt) {
-    KDNodePtr Nearest = nearest_(pt);
-    return pointIndex(point_t(*Nearest), size_t(*Nearest));
-}
+//KDNodePtr KDTree::nearest_(const point_t &pt) {
+//    size_t level = 0;
+//    // KDNodePtr best = branch;
+//    double branch_dist = dist2(point_t(*root), pt);
+//    return nearest_(root,          // beginning of tree
+//                    pt,            // point we are querying
+//                    level,         // start from level 0
+//                    root,          // best is the root
+//                    branch_dist);  // best_dist = branch_dist
+//};
+//
+//point_t KDTree::nearest_point(const point_t &pt) {
+//    return point_t(*nearest_(pt));
+//};
+//size_t KDTree::nearest_index(const point_t &pt) {
+//    return size_t(*nearest_(pt));
+//};
+//
+//pointIndex KDTree::nearest_pointIndex(const point_t &pt) {
+//    KDNodePtr Nearest = nearest_(pt);
+//    return pointIndex(point_t(*Nearest), size_t(*Nearest));
+//}
 
 std::vector<halftoneparticle::Particle> KDTree::neighborhood_(  //
     const KDNodePtr &branch,          //
-    const point_t &pt,                //
+    const glm::vec2 &pt,                //
     const double &rad,                //
     const size_t &level               //
 ) {
@@ -281,17 +286,17 @@ std::vector<halftoneparticle::Particle> KDTree::neighborhood_(  //
         return std::vector<halftoneparticle::Particle>();
     }
 
-    size_t dim = pt.size();
+    size_t dim = 2;
 
     double r2 = rad * rad;
 
-    d = dist2(point_t(*branch), pt);
-    dx = point_t(*branch).at(level) - pt.at(level);
+    d = dist2(branch->particle_.position(), pt);
+    dx = branch->particle_.position().x - pt.x;
     dx2 = dx * dx;
 
     std::vector<halftoneparticle::Particle> nbh, nbh_s, nbh_o;
-    if (d <= r2) {
-        nbh.push_back((branch->particle_));
+    if (d <= rad) {
+        nbh.push_back(std::move(branch->particle_));
     }
 
     //
@@ -319,8 +324,8 @@ std::vector<halftoneparticle::Particle> KDTree::neighborhood(  //
     const halftoneparticle::Particle &p,               //
     const double &rad) {
     size_t level = 0;
-    point_t pos = {p.position().x,p.position().y};
-    return neighborhood_(root, pos, rad, level);
+    //point_t pos = {p.position().x,p.position().y};
+    return neighborhood_(root, p.position(), rad, level);
 }
 
 //pointVec KDTree::neighborhood_points(  //

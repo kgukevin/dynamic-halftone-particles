@@ -18,6 +18,7 @@ namespace halftoneparticle {
         glm::vec2 origin_;
         std::vector<Particle> particles_;
         glm::vec2 gravity_origin_ = glm::vec2(1500, 800);
+        std::map<int, Particle> idx_to_particle_;
 
         cinder::Perlin perlin_ = cinder::Perlin();
 

@@ -32,20 +32,20 @@ class KDNode {
 
     // initializer
     KDNode();
-    KDNode(const halftoneparticle::Particle &, const size_t &, const KDNodePtr &,
-           const KDNodePtr &);
-    KDNode(const halftoneparticle::Particle &, const pointIndex &, const KDNodePtr &, const KDNodePtr &);
+//    KDNode(const halftoneparticle::Particle &, const size_t &, const KDNodePtr &,
+//           const KDNodePtr &);
+    KDNode(halftoneparticle::Particle &, const KDNodePtr &, const KDNodePtr &);
     ~KDNode();
 
     // getter
-    double coord(const size_t &);
+    //double coord(const size_t &);
     // halftoneparticle::Particle GetParticle();
 
     // conversions
     explicit operator bool();
-    explicit operator point_t();
-    explicit operator size_t();
-    explicit operator pointIndex();
+//    explicit operator point_t();
+//    explicit operator size_t();
+//    explicit operator pointIndex();
 };
 
 using KDNodePtr = std::shared_ptr< KDNode >;
@@ -83,8 +83,8 @@ class KDTree {
     KDNodePtr root;
     KDNodePtr leaf;
 
-    KDNodePtr make_tree( const std::vector<halftoneparticle::Particle>::const_iterator &part_begin,
-                         const std::vector<halftoneparticle::Particle>::const_iterator &part_end,
+    KDNodePtr make_tree( std::vector<halftoneparticle::Particle>::iterator &part_begin,
+                         std::vector<halftoneparticle::Particle>::iterator &part_end,
                          const pointIndexArr::iterator &begin,  //
                         const pointIndexArr::iterator &end,    //
                         const size_t &length,                  //
@@ -93,30 +93,30 @@ class KDTree {
 
    public:
     KDTree() = default;
-    explicit KDTree(const std::vector<halftoneparticle::Particle>& particles);
+    explicit KDTree(std::vector<halftoneparticle::Particle>& particles);
 
    private:
 
-    KDNodePtr nearest_(           //
-        const KDNodePtr &branch,  //
-        const point_t &pt,        //
-        const size_t &level,      //
-        const KDNodePtr &best,    //
-        const double &best_dist   //
-    );
-
-    // default caller
-    KDNodePtr nearest_(const point_t &pt);
+//    KDNodePtr nearest_(           //
+//        const KDNodePtr &branch,  //
+//        const point_t &pt,        //
+//        const size_t &level,      //
+//        const KDNodePtr &best,    //
+//        const double &best_dist   //
+//    );
+//
+//    // default caller
+//    KDNodePtr nearest_(const point_t &pt);
 
    public:
-    point_t nearest_point(const point_t &pt);
-    size_t nearest_index(const point_t &pt);
-    pointIndex nearest_pointIndex(const point_t &pt);
+//    point_t nearest_point(const point_t &pt);
+//    size_t nearest_index(const point_t &pt);
+//    pointIndex nearest_pointIndex(const point_t &pt);
 
    private:
     std::vector<halftoneparticle::Particle> neighborhood_(  //
         const KDNodePtr &branch,  //
-        const point_t &pt,        //
+        const glm::vec2 &pt,        //
         const double &rad,        //
         const size_t &level       //
     );

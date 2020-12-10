@@ -53,8 +53,8 @@ namespace halftoneparticle {
         velocity_ = velocity;
     }
 
-    void Particle::SetRadius(const float_t &radius) {
-        radius_ = radius;
+    void Particle::SetAge(int age) {
+        age_ = age;
     }
 
 }  // namespace halftoneparticle
