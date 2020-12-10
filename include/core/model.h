@@ -31,7 +31,10 @@ namespace halftoneparticle {
         Model(const glm::vec2 &origin, const glm::vec2 &dimensions)
             : origin_(origin), dimensions_(dimensions){};
 
-        std::vector<Particle> get_particles() const;
+        Model(const glm::vec2 &origin, const glm::vec2 &dimensions, const std::vector<Particle> &particles)
+                : origin_(origin), dimensions_(dimensions), particles_(particles){};
+
+        std::vector<Particle> GetParticles() const;
 
         /**
          * Add particle to model.
@@ -61,7 +64,10 @@ namespace halftoneparticle {
          * @param y_increment vertical pixel distance between particles
          * @param color of particles
          */
-        void PreLoadHalftoneImage(const glm::vec2 &top_left_corner, double particle_box_width, double particle_box_height, size_t x_increment, size_t y_increment, const std::string &color);
+        void PreloadHalftoneImage(const glm::vec2 &top_left_corner, double particle_box_width, double particle_box_height, size_t x_increment, size_t y_increment, const std::string &color);
+
+        // For particle collision testing purposes
+        void UpdateMove();
 
         /**
          * Updates positions and velocities accordingly.

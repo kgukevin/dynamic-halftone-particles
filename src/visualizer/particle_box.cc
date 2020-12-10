@@ -16,14 +16,7 @@ namespace halftoneparticle {
               particle_box_height_(particle_box_height),
               particle_box_width_(particle_box_width) {
 
-            model_.PreLoadHalftoneImage(top_left_corner, particle_box_width, particle_box_height, 20, 20, "white");
-
-            //for (size_t x = 0; x < 160; x+=80) {
-            //    Particle p1(top_left_corner + vec2(500, x), vec2(1, 0), 5, 1, "cyan");
-            //    Particle p2(top_left_corner + vec2(700, x), vec2(-1, 0), 5, 1, "pink");
-            //    model_.AddParticle(p1);
-            //    model_.AddParticle(p2);
-            //}
+            model_.PreloadHalftoneImage(top_left_corner, particle_box_width, particle_box_height, 20, 20, "white");
         }
 
         void ParticleBox::Draw() const {
@@ -32,7 +25,7 @@ namespace halftoneparticle {
             ci::Rectf pixel_bounding_box(top_left_corner_, bottom_right_corner);
             ci::gl::drawStrokedRect(pixel_bounding_box);
 
-            for (const Particle &particle : model_.get_particles()) {
+            for (const Particle &particle : model_.GetParticles()) {
                 std::string color = particle.color();
                 const char *svgkey = color.c_str();
                 // convert char* svg key (color name) to rgb values

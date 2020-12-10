@@ -3,7 +3,7 @@
 
 
 namespace halftoneparticle {
-    std::vector<Particle> Model::get_particles() const {
+    std::vector<Particle> Model::GetParticles() const {
         return particles_;
     }
 
@@ -27,11 +27,18 @@ namespace halftoneparticle {
         particles_.push_back(new_particle);
     }
 
-    void Model::PreLoadHalftoneImage(const glm::vec2 &top_left_corner, double particle_box_width, double particle_box_height, size_t x_increment, size_t y_increment, const std::string &color) {
+    void Model::PreloadHalftoneImage(const glm::vec2 &top_left_corner, double particle_box_width, double particle_box_height, size_t x_increment, size_t y_increment, const std::string &color) {
         for (size_t x = 0; x < particle_box_width; x += x_increment) {
             for (size_t y = 0; y < particle_box_height; y += y_increment) {
                 CreateAndAddParticle(top_left_corner + glm::vec2(x, y), 0, 1, 1, color);
             }
+        }
+    }
+
+    void Model::UpdateMove() {
+        EvaluateCollisions();
+        for (Particle &particle : particles_) {
+            particle.UpdatePosition();
         }
     }
 
