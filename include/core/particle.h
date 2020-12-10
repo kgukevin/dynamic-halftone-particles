@@ -23,15 +23,15 @@ namespace halftoneparticle {
 
         Particle(const glm::vec2 &position, const glm::vec2 &velocity,
                  const float_t &radius)
-                : position_(position), velocity_(velocity), radius_(radius) {};
+            : position_(position), velocity_(velocity), radius_(radius){};
 
         Particle(const glm::vec2 &position, const glm::vec2 &velocity,
                  const float_t &radius, const float_t &mass, const std::string &color)
-                : position_(position),
-                  velocity_(velocity),
-                  radius_(radius),
-                  mass_(mass),
-                  color_(color) {};
+            : position_(position),
+              velocity_(velocity),
+              radius_(radius),
+              mass_(mass),
+              color_(color){};
 
         const glm::vec2 position() const;
 
@@ -39,19 +39,13 @@ namespace halftoneparticle {
 
         const int age() const;
 
-        /**
-         * Calculates velocity magnitude.
-         * @return velocity magnitude
-         */
-        const float GetVelocityMagn() const;
-
         const float_t radius() const;
 
         const float_t mass() const;
 
         const std::string color() const;
 
-        void set_velocity(const glm::vec2 &velocity);
+        void SetVelocity(const glm::vec2 &velocity);
 
         void SetAge(int age);
 
@@ -65,4 +59,4 @@ namespace halftoneparticle {
         void UpdateAcceleration(const glm::vec2 &g_origin);
     };
 
-}  // namespace halftoneparticle
+}// namespace halftoneparticle

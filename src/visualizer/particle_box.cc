@@ -11,33 +11,19 @@ namespace halftoneparticle {
 
         ParticleBox::ParticleBox(const vec2 &top_left_corner, double particle_box_width,
                                  double particle_box_height)
-                : model_(top_left_corner, vec2(particle_box_width, particle_box_height)),
-                  top_left_corner_(top_left_corner),
-                  particle_box_height_(particle_box_height),
-                  particle_box_width_(particle_box_width) {
+            : model_(top_left_corner, vec2(particle_box_width, particle_box_height)),
+              top_left_corner_(top_left_corner),
+              particle_box_height_(particle_box_height),
+              particle_box_width_(particle_box_width) {
 
-            //TODO turn into "draw initial image" method
-//            for (size_t x = 0; x < particle_box_width; x += 20) {
-//                for (size_t y = 0; y < particle_box_height; y += 20) {
-//                    model_.CreateAndAddParticle(top_left_corner + vec2(x, y), 0, 1, 1, "white");
-//                }
-//            }
-for (size_t x = 0; x < 160; x+=80) {
-    Particle p1(top_left_corner + vec2(500, x), vec2(1, 0), 5, 1, "cyan");
-    Particle p2(top_left_corner + vec2(700, x), vec2(-1, 0), 5, 1, "pink");
-    model_.AddParticle(p1);
-    model_.AddParticle(p2);
-}
-        }
+            model_.PreLoadHalftoneImage(top_left_corner, particle_box_width, particle_box_height, 20, 20, "white");
 
-        ParticleBox::ParticleBox(const glm::vec2 &top_left_corner, double particle_box_width,
-                                 double particle_box_height, const ci::Channel32f &channel)
-                : model_(top_left_corner, vec2(particle_box_width, particle_box_height)),
-                  top_left_corner_(top_left_corner),
-                  particle_box_height_(particle_box_height),
-                  particle_box_width_(particle_box_width),
-                  img_channel_(std::move(channel)) {
-
+            //for (size_t x = 0; x < 160; x+=80) {
+            //    Particle p1(top_left_corner + vec2(500, x), vec2(1, 0), 5, 1, "cyan");
+            //    Particle p2(top_left_corner + vec2(700, x), vec2(-1, 0), 5, 1, "pink");
+            //    model_.AddParticle(p1);
+            //    model_.AddParticle(p2);
+            //}
         }
 
         void ParticleBox::Draw() const {
@@ -53,39 +39,24 @@ for (size_t x = 0; x < 160; x+=80) {
                 ci::gl::color(ci::Color(ci::svgNameToRgb(svgkey)));
 
                 //only drawn radius changes not actual radius
-                //ci::gl::drawSolidCircle(particle.position(), (img_channel_.getValue(particle.position())) * 7.0f);
-                ci::gl::drawSolidCircle(particle.position(), particle.radius());
+                ci::gl::drawSolidCircle(particle.position(), (img_channel_.getValue(particle.position())) * 7.0f);
             }
         }
 
         void ParticleBox::Update() {
-            model_.UpdateMove();
-            //model_.UpdateRadii(img_channel_);
+            model_.UpdateMovement();
         }
 
-        void ParticleBox::HandleBrush(const vec2 &brush_screen_coords) {
-            if (IsWithinWalls(brush_screen_coords)) {
-
-                model_.SetGravityOrigin(brush_screen_coords);
-
-//                if (particle_types_[current_particle_index_] == "darkorange") {
-//                    model_.CreateAndAddParticle(brush_screen_coords, 4, 7, 5, "darkorange");
-//                }
-//                if (particle_types_[current_particle_index_] == "cyan") {
-//                    model_.CreateAndAddParticle(brush_screen_coords, 6, 4, 3, "cyan");
-//                }
-//                if (particle_types_[current_particle_index_] == "deeppink") {
-//                    model_.CreateAndAddParticle(brush_screen_coords, 1, 10, 7, "deeppink");
-//                }
-//                if (particle_types_[current_particle_index_] == "mediumspringgreen") {
-//                    model_.CreateAndAddParticle(brush_screen_coords, 2, 5, 4.5, "mediumspringgreen");
-//                }
-
+        void ParticleBox::HandleParticleCreation(const vec2 &cursor_screen_coords) {
+            if (IsWithinWalls(cursor_screen_coords)) {
                 for (int num = 0; num < 10; num++) {
-                    model_.CreateAndAddParticle(brush_screen_coords, 1, 9, 1, particle_types_[current_particle_index_]);
+                    model_.CreateAndAddParticle(cursor_screen_coords, 1, 9, 1, particle_colors_[current_particle_index_]);
                 }
-
             }
+        }
+
+        void ParticleBox::ChangeGravityOrigin(const vec2 &cursor_screen_coords) {
+            model_.SetGravityOrigin(cursor_screen_coords);
         }
 
         bool ParticleBox::IsWithinWalls(const vec2 &brush_screen_coords) {
@@ -101,13 +72,9 @@ for (size_t x = 0; x < 160; x+=80) {
             return model_;
         }
 
-        const std::string &ParticleBox::GetCurrentParticleType() {
-            return particle_types_[current_particle_index_];
-        }
-
         void ParticleBox::IncrementParticleTypeIndex() {
             current_particle_index_++;
-            if (current_particle_index_ == particle_types_.size()) {
+            if (current_particle_index_ == particle_colors_.size()) {
                 current_particle_index_ = 0;
             }
         }
@@ -117,11 +84,10 @@ for (size_t x = 0; x < 160; x+=80) {
         }
 
         void ParticleBox::Clear() {
-            // TODO: implement this method
             model_.Clear();
         }
 
 
-    }  // namespace visualizer
+    }// namespace visualizer
 
-}  // namespace halftoneparticle
+}// namespace halftoneparticle

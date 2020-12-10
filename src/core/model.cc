@@ -1,5 +1,5 @@
-#include <core/model.h>
 #include <cinder/app/AppBase.h>
+#include <core/model.h>
 
 
 namespace halftoneparticle {
@@ -25,48 +25,47 @@ namespace halftoneparticle {
 
         Particle new_particle(pos, new_velocity, radius, mass, color);
         particles_.push_back(new_particle);
-
     }
 
-    void Model::UpdateMove() {
+    void Model::PreLoadHalftoneImage(const glm::vec2 &top_left_corner, double particle_box_width, double particle_box_height, size_t x_increment, size_t y_increment, const std::string &color) {
+        for (size_t x = 0; x < particle_box_width; x += x_increment) {
+            for (size_t y = 0; y < particle_box_height; y += y_increment) {
+                CreateAndAddParticle(top_left_corner + glm::vec2(x, y), 0, 1, 1, color);
+            }
+        }
+    }
+
+    void Model::UpdateMovement() {
         for (Particle &particle : particles_) {
             particle.UpdatePosition();
-            float noise = perlin_.fBm(glm::vec3(gravity_origin_ * 0.009f,  0.1f));
-            float noise2 = perlin_.fBm(glm::vec3(particle.position() * 0.009f,  0.1f));
-            float angle = noise * 20.0f;
-            float angle2 = noise2 * 20.0f;
-            // TODO remove age
-            float perAge = (particle.age() / 100000000.0f);
-//            particle.set_velocity(particle.velocity() + glm::vec2(.05 * cos(angle) * perAge, .05 * sin(angle) * perAge) +
-//                                  glm::vec2(.2 * cos(angle2) * perAge, .2 * sin(angle2) * perAge));
-            //particle.set_velocity(particle.velocity() + glm::vec2(.1 * cos(angle2), .1 * sin(angle2)));
-            //particle.UpdateAcceleration(gravity_origin_);
-            //particle.UpdateVelocity();
+            ApplyPerlinNoise(particle, particle.position(), .8f);
+            particle.UpdateAcceleration(gravity_origin_);
+            particle.UpdateVelocity();
         }
         EvaluateCollisions();
 
-        //DecreaseVelocity();
+        DecreaseVelocity();
     }
 
-//    void Model::UpdateRadii(const ci::Channel32f &img_channel) {
-//        for (Particle &particle : particles_) {
-//            particle.SetRadius((img_channel.getValue(particle.position())) * 10.0f);
-//        }
-//    }
+    void Model::ApplyPerlinNoise(Particle &particle, const glm::vec2 &origin, float influence_factor) {
+        float noise = perlin_.fBm(glm::vec3(origin * 0.009f, 0.1f));
+        float angle = noise * 20.0f;
+
+        particle.SetVelocity(particle.velocity() + glm::vec2(influence_factor * cos(angle), influence_factor * sin(angle)));
+    }
 
     void Model::EvaluateCollisions() {
-        KDTree tree(particles_);
+        //KDTree tree(particles_);
         for (Particle &particle : particles_) {
             HandleWallCollision(particle);
-            std::vector<Particle> neighborhood = tree.neighborhood(particle, particle.radius());
-            for (Particle &particle2 : neighborhood) {
-            //for (Particle &particle2 : particles_) {
+            //std::vector<Particle> neighborhood = tree.neighborhood(particle, particle.radius());
+            //for (Particle &particle2 : neighborhood) {
+            for (Particle &particle2 : particles_) {
                 if (&particle != &particle2) {
-                    HandleParticleCollision(particle, particle2);
-//                    if (glm::distance(particle.position(), particle2.position()) <=
-//                        particle.radius() + particle2.radius()) {
-//                        HandleParticleCollision(particle, particle2);
-//                    }
+                    if (glm::distance(particle.position(), particle2.position()) <=
+                        particle.radius() + particle2.radius()) {
+                        HandleParticleCollision(particle, particle2);
+                    }
                 }
             }
         }
@@ -87,7 +86,7 @@ namespace halftoneparticle {
             (pos.y + radius >= outer_wall.y && vel.y > 0)) {
             vel.y *= -1;
         }
-        particle.set_velocity(vel);
+        particle.SetVelocity(vel);
     }
 
     void Model::HandleParticleCollision(Particle &particle, Particle &particle2) {
@@ -115,11 +114,11 @@ namespace halftoneparticle {
 
         if (glm::dot(delta_v1, delta_x1) < 0) {
             new_vel = vel - mass_ratio_coefficient * glm::dot(delta_v1, delta_x1) /
-                            pow(glm::length(delta_x1), 2) * delta_x1;
+                                    pow(glm::length(delta_x1), 2) * delta_x1;
             new_vel2 = vel2 - mass_ratio_coefficient2 * glm::dot(delta_v2, delta_x2) /
-                              pow(glm::length(delta_x2), 2) * delta_x2;
-            particle.set_velocity(new_vel);
-            particle2.set_velocity(new_vel2);
+                                      pow(glm::length(delta_x2), 2) * delta_x2;
+            particle.SetVelocity(new_vel);
+            particle2.SetVelocity(new_vel2);
         }
     }
 
@@ -129,14 +128,14 @@ namespace halftoneparticle {
 
     void Model::IncreaseVelocity() {
         for (Particle &particle : particles_) {
-            particle.set_velocity(
+            particle.SetVelocity(
                     glm::vec2(particle.velocity().x * 1.2, particle.velocity().y * 1.2));
         }
     }
 
     void Model::DecreaseVelocity() {
         for (Particle &particle : particles_) {
-            particle.set_velocity(
+            particle.SetVelocity(
                     glm::vec2(particle.velocity().x * .8, particle.velocity().y * .8));
         }
     }
@@ -145,4 +144,4 @@ namespace halftoneparticle {
         particles_.clear();
     }
 
-}  // namespace halftoneparticle
+}// namespace halftoneparticle

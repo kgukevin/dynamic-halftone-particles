@@ -5,10 +5,10 @@
 #include <utility>
 #include <vector>
 
-#include "cinder/gl/gl.h"
-#include "cinder/Perlin.h"
-#include "particle.h"
 #include "KDTree.hpp"
+#include "cinder/Perlin.h"
+#include "cinder/gl/gl.h"
+#include "particle.h"
 
 namespace halftoneparticle {
 
@@ -17,8 +17,7 @@ namespace halftoneparticle {
         glm::vec2 dimensions_;
         glm::vec2 origin_;
         std::vector<Particle> particles_;
-        glm::vec2 gravity_origin_ = glm::vec2(1500, 800);
-        std::map<int, Particle> idx_to_particle_;
+        glm::vec2 gravity_origin_ = origin_ + 0.5f * dimensions_;
 
         cinder::Perlin perlin_ = cinder::Perlin();
 
@@ -30,13 +29,7 @@ namespace halftoneparticle {
 
     public:
         Model(const glm::vec2 &origin, const glm::vec2 &dimensions)
-                : origin_(origin), dimensions_(dimensions) {};
-
-        Model(const glm::vec2 &origin, const glm::vec2 &dimensions,
-              std::vector<Particle> particles)
-                : origin_(origin),
-                  dimensions_(dimensions),
-                  particles_(std::move(particles)) {};
+            : origin_(origin), dimensions_(dimensions){};
 
         std::vector<Particle> get_particles() const;
 
@@ -60,12 +53,27 @@ namespace halftoneparticle {
                                   const std::string &color);
 
         /**
+         * Preloads particles to draw halftone image.
+         * @param top_left_corner of particle_box
+         * @param particle_box_width
+         * @param particle_box_height
+         * @param x_increment horizantal pixel distance between particles
+         * @param y_increment vertical pixel distance between particles
+         * @param color of particles
+         */
+        void PreLoadHalftoneImage(const glm::vec2 &top_left_corner, double particle_box_width, double particle_box_height, size_t x_increment, size_t y_increment, const std::string &color);
+
+        /**
          * Updates positions and velocities accordingly.
          */
-        void UpdateMove();
+        void UpdateMovement();
 
-        //void UpdateRadii(const ci::Channel32f &img_channel);
+        void ApplyPerlinNoise(Particle &particle, const glm::vec2 &origin, float influence_factor);
 
+        /**
+         * Updates position of center of gravity.
+         * @param gravity_origin
+         */
         void SetGravityOrigin(const glm::vec2 &gravity_origin);
 
         /**
@@ -84,4 +92,4 @@ namespace halftoneparticle {
         void Clear();
     };
 
-}  // namespace halftoneparticle
+}// namespace halftoneparticle

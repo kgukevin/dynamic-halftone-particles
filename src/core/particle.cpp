@@ -1,6 +1,7 @@
 #include <core/particle.h>
 #include <fstream>
 
+
 namespace halftoneparticle {
     Particle::Particle() = default;
 
@@ -10,10 +11,6 @@ namespace halftoneparticle {
 
     const glm::vec2 Particle::velocity() const {
         return velocity_;
-    }
-
-    const float Particle::GetVelocityMagn() const {
-        return sqrt(pow(velocity_.x, 2) + pow(velocity_.y, 2));
     }
 
     const int Particle::age() const {
@@ -49,7 +46,7 @@ namespace halftoneparticle {
         acceleration_.y = -.2f * displacement.y / distance;
     }
 
-    void Particle::set_velocity(const glm::vec2 &velocity) {
+    void Particle::SetVelocity(const glm::vec2 &velocity) {
         velocity_ = velocity;
     }
 
@@ -57,4 +54,4 @@ namespace halftoneparticle {
         age_ = age;
     }
 
-}  // namespace halftoneparticle
+}// namespace halftoneparticle

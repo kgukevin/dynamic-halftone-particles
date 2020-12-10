@@ -35,7 +35,7 @@ KDNode::KDNode() = default;
 KDNode::KDNode(halftoneparticle::Particle &p, const KDNodePtr &left_,
                const KDNodePtr &right_) {
     particle_ = p;
-    x = point_t ({particle_.position().x,particle_.position().y});
+    x = point_t({particle_.position().x, particle_.position().y});
     index = particle_.age();
     left = left_;
     right = right_;
@@ -51,17 +51,17 @@ KDNode::operator bool() { return (!x.empty()); }
 //KDNode::operator pointIndex() { return pointIndex(x, index); }
 
 KDNodePtr NewKDNodePtr() {
-    KDNodePtr mynode = std::make_shared< KDNode >();
+    KDNodePtr mynode = std::make_shared<KDNode>();
     return mynode;
 }
 
 inline double dist2(const glm::vec2 &a, const glm::vec2 &b) {
     //double distc = 0;
-//    for (size_t i = 0; i < a.size(); i++) {
-//        double di = a.at(i) - b.at(i);
-//        distc += di * di;
-//    }
-    return glm::distance(a,b);
+    //    for (size_t i = 0; i < a.size(); i++) {
+    //        double di = a.at(i) - b.at(i);
+    //        distc += di * di;
+    //    }
+    return glm::distance(a, b);
     //return distc;
 }
 
@@ -79,14 +79,14 @@ inline double dist2(const KDNodePtr &a, const KDNodePtr &b) {
 
 comparer::comparer(size_t idx_) : idx{idx_} {};
 
-inline bool comparer::compare_idx(const pointIndex &a,  //
-                                  const pointIndex &b   //
+inline bool comparer::compare_idx(const pointIndex &a,//
+                                  const pointIndex &b //
 ) {
-    return (a.first.at(idx) < b.first.at(idx));  //
+    return (a.first.at(idx) < b.first.at(idx));//
 }
 
-inline void sort_on_idx(const pointIndexArr::iterator &begin,  //
-                        const pointIndexArr::iterator &end,    //
+inline void sort_on_idx(const pointIndexArr::iterator &begin,//
+                        const pointIndexArr::iterator &end,  //
                         size_t idx) {
     comparer comp(idx);
     comp.idx = idx;
@@ -98,17 +98,17 @@ inline void sort_on_idx(const pointIndexArr::iterator &begin,  //
                      end, std::bind(&comparer::compare_idx, comp, _1, _2));
 }
 
-using pointVec = std::vector< point_t >;
+using pointVec = std::vector<point_t>;
 
 KDNodePtr KDTree::make_tree(std::vector<halftoneparticle::Particle>::iterator &part_begin,
                             std::vector<halftoneparticle::Particle>::iterator &part_end,
-                            const pointIndexArr::iterator &begin,  //
-                            const pointIndexArr::iterator &end,    //
-                            const size_t &length,                  //
-                            const size_t &level                    //
+                            const pointIndexArr::iterator &begin,//
+                            const pointIndexArr::iterator &end,  //
+                            const size_t &length,                //
+                            const size_t &level                  //
 ) {
     if (begin == end) {
-        return NewKDNodePtr();  // empty tree
+        return NewKDNodePtr();// empty tree
     }
 
     size_t dim = 2;
@@ -147,20 +147,20 @@ KDNodePtr KDTree::make_tree(std::vector<halftoneparticle::Particle>::iterator &p
     }
 
     // KDNode result = KDNode();
-    return std::make_shared< KDNode >(*part_middle, left, right);
+    return std::make_shared<KDNode>(*part_middle, left, right);
 }
 
-KDTree::KDTree(std::vector<halftoneparticle::Particle>& particles) {
-//    pointVec point_array;
-//    for(const halftoneparticle::Particle& particle : particles) {
-//        point_array.push_back(std::vector<double>(particle.position().x,particle.position().y));
-//    }
+KDTree::KDTree(std::vector<halftoneparticle::Particle> &particles) {
+    //    pointVec point_array;
+    //    for(const halftoneparticle::Particle& particle : particles) {
+    //        point_array.push_back(std::vector<double>(particle.position().x,particle.position().y));
+    //    }
     //TODO delete
     //std::pair<point_t , int> test(std::vector<double>(1,2),2);
-//    std::pair<point_t, halftoneparticle::Particle> test(std::vector<double>(1,2),halftoneparticle::Particle(glm::vec2(1,2), glm::vec2(1,2),.5f));
-//    halftoneparticle::Particle x = test.second;
+    //    std::pair<point_t, halftoneparticle::Particle> test(std::vector<double>(1,2),halftoneparticle::Particle(glm::vec2(1,2), glm::vec2(1,2),.5f));
+    //    halftoneparticle::Particle x = test.second;
 
-    leaf = std::make_shared< KDNode >();
+    leaf = std::make_shared<KDNode>();
     // iterators
     pointIndexArr arr;
     for (size_t i = 0; i < particles.size(); i++) {
@@ -178,7 +178,7 @@ KDTree::KDTree(std::vector<halftoneparticle::Particle>& particles) {
     std::vector<halftoneparticle::Particle>::iterator part_end = particles.end();
 
     size_t length = arr.size();
-    size_t level = 0;  // starting
+    size_t level = 0;// starting
 
     root = KDTree::make_tree(part_begin, part_end, begin, end, length, level);
 }
@@ -272,11 +272,11 @@ KDTree::KDTree(std::vector<halftoneparticle::Particle>& particles) {
 //    return pointIndex(point_t(*Nearest), size_t(*Nearest));
 //}
 
-std::vector<halftoneparticle::Particle> KDTree::neighborhood_(  //
-    const KDNodePtr &branch,          //
-    const glm::vec2 &pt,                //
-    const double &rad,                //
-    const size_t &level               //
+std::vector<halftoneparticle::Particle> KDTree::neighborhood_(//
+        const KDNodePtr &branch,                              //
+        const glm::vec2 &pt,                                  //
+        const double &rad,                                    //
+        const size_t &level                                   //
 ) {
     double d, dx, dx2;
 
@@ -320,9 +320,9 @@ std::vector<halftoneparticle::Particle> KDTree::neighborhood_(  //
     return nbh;
 };
 
-std::vector<halftoneparticle::Particle> KDTree::neighborhood(  //
-    const halftoneparticle::Particle &p,               //
-    const double &rad) {
+std::vector<halftoneparticle::Particle> KDTree::neighborhood(//
+        const halftoneparticle::Particle &p,                 //
+        const double &rad) {
     size_t level = 0;
     //point_t pos = {p.position().x,p.position().y};
     return neighborhood_(root, p.position(), rad, level);

@@ -8,7 +8,7 @@ namespace halftoneparticle {
 
     namespace visualizer {
 
-/**
+        /**
  * A particle_box which will be displayed in the Cinder application and respond
  * to mouse events.
  */
@@ -22,9 +22,6 @@ namespace halftoneparticle {
              */
             ParticleBox(const glm::vec2 &top_left_corner, double particle_box_width,
                         double particle_box_height);
-
-            ParticleBox(const glm::vec2 &top_left_corner, double particle_box_width,
-                        double particle_box_height, const ci::Channel32f &channel);
 
             /**
              * Displays the current state of the particle_box in the Cinder application.
@@ -42,7 +39,9 @@ namespace halftoneparticle {
              * @param brush_screen_coords the screen coordinates at which the brush is
              *           located
              */
-            void HandleBrush(const glm::vec2 &brush_screen_coords);
+            void HandleParticleCreation(const glm::vec2 &brush_screen_coords);
+
+            void ChangeGravityOrigin(const glm::vec2 &cursor_screen_coords);
 
             /**
              * Checks if new particle to be added is within borders of particle_box.
@@ -56,12 +55,6 @@ namespace halftoneparticle {
              * @return reference of model
              */
             Model &GetModel();
-
-            /**
-             * Gets particle type (classified by color).
-             * @return string (svgname) of current particle type
-             */
-            const std::string &GetCurrentParticleType();
 
             /**
              * Increments particle type index through particle types array. Wraps back to
@@ -95,13 +88,13 @@ namespace halftoneparticle {
             /**
              * Preset particle types.
              */
-            std::array<std::string, 4> particle_types_ = {
+            std::array<std::string, 4> particle_colors_ = {
                     "darkorange",
                     "cyan",
                     "deeppink",
                     "mediumspringgreen"};
         };
 
-    }  // namespace visualizer
+    }// namespace visualizer
 
-}  // namespace halftoneparticle
+}// namespace halftoneparticle
