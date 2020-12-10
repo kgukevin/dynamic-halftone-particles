@@ -9,7 +9,7 @@ namespace halftoneparticle {
                                                                    kWindowLength - 2 * kMargin,
                                                                    kWindowHeight - 2 * kMargin) {
 
-            mChannel = ci::Channel32f(loadImage(loadAsset("testimage2.jpg")));
+            mChannel = ci::Channel32f(loadImage(loadAsset("testimage2.jpg"))); //default image
             const ci::Area img_area = mChannel.getBounds();
             ci::app::setWindowSize((int) img_area.x2, (int) img_area.y2);
 
@@ -23,6 +23,18 @@ namespace halftoneparticle {
             //mChannel = ci::Channel(loadImage(loadAsset("testimage.jpg")));
 
             mTexture = ci::gl::Texture::create(mChannel);
+        }
+
+        void HalftoneParticleApp::fileDrop(ci::app::FileDropEvent event) {
+            const ci::fs::path& path = event.getFile(0);
+            mChannel = ci::Channel32f(cinder::loadImage(path));
+            const ci::Area img_area = mChannel.getBounds();
+            ci::app::setWindowSize((int) img_area.x2, (int) img_area.y2);
+
+            particle_box_ = ParticleBox(glm::vec2(kMargin, kMargin),
+                                        img_area.x2 - 2 * kMargin,
+                                        img_area.y2 - 2 * kMargin);
+            particle_box_.LoadImage(mChannel);
         }
 
         void HalftoneParticleApp::draw() {
@@ -62,6 +74,19 @@ namespace halftoneparticle {
                 case ci::app::KeyEvent::KEY_g:
                     particle_box_.IncrementParticleTypeIndex();
                     break;
+
+                case ci::app::KeyEvent::KEY_o: {
+                    ci::fs::path path = getOpenFilePath("", ci::ImageIo::getLoadExtensions());
+                    mChannel = ci::Channel32f(cinder::loadImage(path));
+                    const ci::Area img_area = mChannel.getBounds();
+                    ci::app::setWindowSize((int) img_area.x2, (int) img_area.y2);
+
+                    particle_box_ = ParticleBox(glm::vec2(kMargin, kMargin),
+                                                img_area.x2 - 2 * kMargin,
+                                                img_area.y2 - 2 * kMargin);
+                    particle_box_.LoadImage(mChannel);
+                    break;
+                }
 
                 case ci::app::KeyEvent::KEY_DELETE:
                     particle_box_.Clear();

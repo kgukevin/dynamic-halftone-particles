@@ -16,6 +16,8 @@ namespace halftoneparticle {
         public:
             HalftoneParticleApp();
 
+            void fileDrop(ci::app::FileDropEvent event);
+
             void draw() override;
             void mouseDown(ci::app::MouseEvent event) override;
             void mouseDrag(ci::app::MouseEvent event) override;
